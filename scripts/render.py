@@ -87,6 +87,8 @@ def img_url(u, size="card"):
     card = size == "card"
     if u.startswith(DOTIDOT):        # dotidot answers every image with a 302 to its storage host: skip the hop
         u = "https://dotidot-production-control-app-control-app-images.storage.dotidot.io/" + u[len(DOTIDOT):]
+    if "a.allegroimg.com/original/" in u:     # Allegro renditions by path (wsrv.nl cannot fetch Allegro): s360 cards, s720 detail
+        return u.replace("/original/", "/s360/" if card else "/s720/")
     if "img2.ans-media.com/i/" in u:        # Answear renditions by path: 855x1290 (feed) -> 400x600 for cards (36 kB WebP)
         return re.sub(r"/i/\d+x\d+/", "/i/400x600/" if card else "/i/855x1290/", u)
     if "cdn.myshoptet.com" in u and "/user/shop/orig/" in u:
@@ -416,7 +418,7 @@ class Site:
         toggles = ('<label class="fbt"><input type="checkbox" name="sale" value="1"><span>Ve slevě</span></label>'
                    '<label class="fbt"><input type="checkbox" name="multi" value="1"><span>Ve více obchodech</span></label>')
         return ('<form class="filters" id="filters" aria-label="Filtry"><div class="fhead"><b>Všechny filtry</b><button class="fx" type="button" aria-label="Zavřít">✕</button></div>'
-                '<div class="fbar"><button class="fall" type="button"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M3 5h14M6 10h8M8 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Všechny filtry</button>'
+                '<div class="fbar" data-scroll><button class="fall" type="button"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M3 5h14M6 10h8M8 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Všechny filtry</button>'
                 + "".join(pills) + toggles + '</div><div class="ffoot"><button class="btn btn--g freset" type="button">Zrušit vše</button>'
                 '<button class="btn fclose" type="button">Zobrazit <span class="fcount"></span></button></div></form><div class="fshade" hidden></div>')
 

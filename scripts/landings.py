@@ -162,11 +162,11 @@ def generated_records(products, by_cat):
         base = {"parent": f"/{cat}/", "cat": cat}
         cnt = lambda key: Counter(x for p in items for x in p[key])
         for c, n in cnt("colors").most_common():
-            if n >= MIN_DEFAULT:
+            if n >= MIN_DEFAULT and not (not watch and c in ("zlata", "stribrna", "ruzove-zlata")):    # jewellery: the metal pages say it
                 recs.append({**base, "slug": f"{cat}/{COLOR_SLUG[c]}", "h1": phrase(COLOR_ADJ[c], cat, noun), "group": f"{cat}-color",
                              "_pred": (lambda c: lambda p: c in p["colors"])(c), "facet": ("colors", c)})
         for m, n in cnt("mats").most_common():
-            if n >= MIN_DEFAULT and (watch or m not in WATCH_ONLY_MATS) and cat not in ("reminky",):
+            if n >= MIN_DEFAULT and (watch or m not in WATCH_ONLY_MATS) and cat not in ("reminky",) and not (watch and m in ("stribro", "zlato", "pozlacene")):
                 recs.append({**base, "slug": f"{cat}/{MAT_SLUG[m]}", "h1": phrase(MAT_ADJ[m], cat, noun), "group": f"{cat}-mat",
                              "_pred": (lambda m: lambda p: m in p["mats"])(m), "facet": ("mats", m)})
         for s_, n in cnt("styles").most_common():
@@ -269,9 +269,13 @@ def plan(products, reserved=()):
     late = ("kw2", "gap7")       # phrase pages last: they only add what the families do not cover; gap7 (round 7 facets) after kw2 so live kw2 URLs keep their products
     recs = [r for r in recs if r.get("group") not in late] + [r for g in late for r in recs if r.get("group") == g]
     seen_paths, groups, out, dropped = set(reserved), defaultdict(list), [], defaultdict(int)
+    seen_h1 = set()
     all_sets = []        # product-id sets of every accepted page: records with "dedupe_all" must differ from all of them
     for r in recs:
         path = "/" + r["slug"].strip("/") + "/"
+        if r["h1"].lower() in seen_h1:
+            dropped["same h1 as an earlier page"] += 1
+            continue
         if path in seen_paths:
             dropped["path exists"] += 1
             continue
@@ -303,6 +307,7 @@ def plan(products, reserved=()):
         all_sets.append(ids)
         groups[g].append(ids)
         seen_paths.add(path)
+        seen_h1.add(r["h1"].lower())
         prices = sorted(p["price"] for p in items)
         out.append({"path": path, "slug": r["slug"].strip("/"), "h1": r["h1"], "title": r.get("title"), "lead": r.get("lead"), "desc": r.get("desc"), "items": items,
                     "parent": r.get("parent"), "hubs": r.get("hubs", []), "group": g, "cat": r.get("cat") or ((r.get("rules") or {}).get("cat") or [None])[0],

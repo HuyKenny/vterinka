@@ -193,7 +193,7 @@ def main():
     versions = []
     for name, cfg in workers:
         version = upload(cfg, name)
-        if version is None and name != "vterinka":     # a brand-new shard: create it now (no routes, so it serves nothing yet)
+        if version is None:     # a brand-new Worker: create it now (a shard has no routes, so it serves nothing yet; the main one on the very first deploy)
             if wrangler(cfg, name).returncode:
                 sys.exit(f"creating {name} failed")
             version = upload(cfg, name)

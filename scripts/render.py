@@ -395,6 +395,7 @@ class Site:
         return (f'<div class="layout">{refine}{filt}<div class="factive" id="factive" hidden></div><div class="results"><div class="listhead"><p><b id="count">{n}</b> {plural(n, "kus", "kusy", "kusů")}</p>'
                 f'<label class="sort">Řadit <select id="sort"><option value="pop">doporučené</option><option value="price"{" selected" if order == "price" else ""}>nejlevnější</option>'
                 f'<option value="pricedesc">nejdražší</option><option value="sale">největší sleva</option></select></label></div>'
+                '<h2 class="sr">Nabídka</h2>'      # cards are h3: keep the heading order h1 > h2 > h3 (Lighthouse a11y)
                 f'<ul class="grid grid--list" id="plist" data-json="{json_url}" data-page="{cur}" data-per="{PER_PAGE}" data-order="{order}">{"".join(self.card(p, lazy=True if i > 3 else ("high" if i < 2 else False)) for i, p in enumerate(chunk))}</ul>'
                 f'{pager_html(path, cur, pages, n, PER_PAGE) if path else ""}</div></div>')
 

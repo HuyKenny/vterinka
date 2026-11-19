@@ -249,6 +249,15 @@
    "offer": "1177",
    "feed_key": "ap_1177",
    "color": "#E2231A"
+  },
+  {
+   "id": "pavona",
+   "name": "Pavona.cz",
+   "domain": "pavona.cz",
+   "network": "ehub",
+   "a_bid": "291f04d0",
+   "feed_key": "eh_evolutiongroup",
+   "color": "#6B4E9B"
   }
  ]
 }

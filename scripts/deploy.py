@@ -1,0 +1,223 @@
+#!/usr/bin/env python3
+"""Deploy dist/ as Workers static assets — no Worker script anywhere, so no request is ever billed.
+
+    python3 scripts/deploy.py staging       # one Worker "vterinka-staging" on workers.dev (noindex build, must fit one Worker)
+    python3 scripts/deploy.py production    # main Worker on vterinka.cz/* (+ www) and, if needed, shard Workers
+
+A Worker version holds at most 100 000 files. When dist/ is bigger, product pages /produkt/<x>… are moved into shard
+Workers by the first character of the slug; each shard gets the route vterinka.cz/produkt/<x>* (more specific routes
+win over vterinka.cz/*). Every shard is assets-only too.
+Needs CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID in the environment (GitHub secrets). Prints no secrets.
+"""
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+import time
+import urllib.error
+import urllib.request
+from concurrent.futures import ThreadPoolExecutor
+from collections import Counter
+from pathlib import Path
+
+APP = Path(__file__).resolve().parent.parent
+DIST = APP / "dist"
+LIMIT = 95_000
+WRANGLER = "wrangler@4.151.3"
+ZONE = "vterinka.cz"
+
+
+def count(d):
+    return sum(1 for p in d.rglob("*") if p.is_file())
+
+
+FORBIDDEN = ("main", "d1_databases", "kv_namespaces", "r2_buckets", "durable_objects", "queues", "services", "ai", "browser",
+             "vectorize", "hyperdrive", "analytics_engine_datasets", "triggers", "cron", "workflows")
+
+
+def wrangler(cfg, name, cmd=("deploy",), capture=False):
+    """Cost guard: this site must stay assets-only (no Worker script, no D1/KV/R2/AI binding, no cron) — static asset
+    requests are free, anything with code or storage is billed on the shared Cloudflare account."""
+    bad = [k for k in FORBIDDEN if k in cfg]
+    if bad:
+        sys.exit(f"refusing to deploy {name}: billed features in config: {bad}")
+    if set(cfg.get("assets", {})) - {"directory", "html_handling", "not_found_handling"}:
+        sys.exit(f"refusing to deploy {name}: unexpected assets options")
+    path = APP / f".wrangler-{name}.json"
+    path.write_text(json.dumps(cfg, indent=1))
+    r = subprocess.run(["npx", "--yes", WRANGLER, *cmd, "--config", str(path)], cwd=APP, capture_output=capture, text=capture)
+    path.unlink(missing_ok=True)
+    if capture:
+        print(r.stdout[-3000:], r.stderr[-2000:], sep="\n")
+    return r
+
+
+def cf_api(method, path, body=None):
+    """Cloudflare API with the deploy token (zone read + Workers routes edit). Returns the parsed JSON, errors included."""
+    req = urllib.request.Request("https://api.cloudflare.com/client/v4" + path, method=method,
+                                 data=json.dumps(body).encode() if body is not None else None,
+                                 headers={"Authorization": "Bearer " + os.environ["CLOUDFLARE_API_TOKEN"], "Content-Type": "application/json",
+                                          "User-Agent": "vterinka-deploy"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return json.load(r)
+    except urllib.error.HTTPError as e:
+        return json.load(e)
+
+
+def sync_routes(shard_dirs):
+    """Point every vterinka.cz/produkt/<char>* route at the shard that now holds that character, in place.
+
+    `wrangler triggers deploy` cannot move a route from one Worker to another ("Can't deploy routes that are assigned to
+    another worker"): on 16. 11. 2026 a new fifth shard shifted the characters, the routes stayed on the old shards and
+    product pages answered 404. Updating the existing route's script is a single atomic change per route; routes of
+    characters that went back to the main Worker are deleted. Returns a list of error texts."""
+    zone = cf_api("GET", f"/zones?name={ZONE}")["result"][0]["id"]
+    have = {r["pattern"]: r for r in cf_api("GET", f"/zones/{zone}/workers/routes?per_page=500")["result"]}
+    want = {f"{ZONE}/produkt/{c}*": name for name, _, chars in shard_dirs for c in chars}
+    jobs = []
+    for pattern, script in want.items():
+        r = have.get(pattern)
+        if r is None:
+            jobs.append(("POST", f"/zones/{zone}/workers/routes", {"pattern": pattern, "script": script}))
+        elif r.get("script") != script:
+            jobs.append(("PUT", f"/zones/{zone}/workers/routes/{r['id']}", {"pattern": pattern, "script": script}))
+    for pattern, r in have.items():
+        if pattern.startswith(f"{ZONE}/produkt/") and pattern not in want:
+            jobs.append(("DELETE", f"/zones/{zone}/workers/routes/{r['id']}", None))
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        res = list(pool.map(lambda j: (j, cf_api(*j)), jobs))
+    errs = [f"route {j[0]} {(j[2] or {}).get('pattern', j[1])}: {r.get('errors')}" for j, r in res if not r.get("success")]
+    print(f"routes: {sum(1 for j in jobs if j[0] == 'PUT')} moved, {sum(1 for j in jobs if j[0] == 'POST')} added, "
+          f"{sum(1 for j in jobs if j[0] == 'DELETE')} removed, {len(errs)} errors")
+    return errs
+
+
+def upload(cfg, name):
+    """Upload a new version WITHOUT serving it (the slow part: tens of thousands of files). Returns its version id, or
+    None when the Worker does not exist yet (first deploy of a new shard)."""
+    r = wrangler(cfg, name, ("versions", "upload", "--message", "vterinka build"), capture=True)
+    m = re.search(r"Worker Version ID:\s*([0-9a-f-]{36})", (r.stdout or "") + (r.stderr or ""))
+    if r.returncode or not m:
+        out = (r.stderr or "") + (r.stdout or "")
+        if re.search(r"does not (yet )?exist|10007", out):     # wrangler 4.151: "...a Worker that does not yet exist"
+            return None
+        sys.exit(f"version upload of {name} failed")
+    return m.group(1)
+
+
+def activate(cfg, name, version):
+    """Serve the uploaded version (about a second). Returns an error text or None (runs in threads: no sys.exit here)."""
+    if wrangler(cfg, name, ("versions", "deploy", f"{version}@100%", "--yes", "--message", "vterinka build")).returncode:
+        return f"activating {name} failed"
+    return None
+
+
+def routes(cfg, name):
+    """Apply the Worker's routes (vterinka.cz/produkt/<char>*); unchanged routes are a no-op."""
+    if wrangler(cfg, name, ("triggers", "deploy")).returncode:
+        return f"routes of {name} failed"
+    return None
+
+
+def base_cfg(name, directory):
+    return {"name": name, "compatibility_date": "2026-10-01", "preview_urls": False, "observability": {"enabled": False},
+            "assets": {"directory": str(directory), "html_handling": "auto-trailing-slash", "not_found_handling": "404-page"}}
+
+
+def plan_shards(slugs_by_char, room):
+    """Greedy: consecutive first characters into shards of <= LIMIT files each."""
+    shards, cur, n = [], [], 0
+    for ch in sorted(slugs_by_char):
+        c = slugs_by_char[ch]
+        if cur and n + c > LIMIT - 200:
+            shards.append(cur)
+            cur, n = [], 0
+        cur.append(ch)
+        n += c
+    if cur:
+        shards.append(cur)
+    return shards
+
+
+def main():
+    env = sys.argv[1] if len(sys.argv) > 1 else "staging"
+    total = count(DIST)
+    print(f"dist: {total} files")
+    if env == "staging":
+        if total > LIMIT:
+            sys.exit(f"staging must fit one Worker ({total} > {LIMIT}); build with VT_MAX_PRODUCTS")
+        cfg = base_cfg("vterinka-staging", DIST)
+        cfg["workers_dev"] = True
+        wrangler(cfg, "vterinka-staging")
+        return
+    shard_dirs = []
+    if total > LIMIT:
+        prod = DIST / "produkt"
+        by_char = Counter(p.name[0] for p in prod.iterdir() if p.is_dir())
+        need = total - LIMIT + 2000
+        moved, shards = 0, plan_shards(by_char, need)
+        for i, chars in enumerate(shards):
+            d = APP / f"dist-s{i:02d}"
+            shutil.rmtree(d, ignore_errors=True)
+            (d / "produkt").mkdir(parents=True)
+            for ch in chars:
+                for p in list(prod.glob(f"{ch}*")):
+                    shutil.move(str(p), d / "produkt" / p.name)
+            shutil.copy(DIST / "404.html", d / "404.html")
+            shutil.copy(DIST / "_headers", d / "_headers")
+            shard_dirs.append((f"vterinka-s{i:02d}", d, chars))
+            moved += count(d)
+            if count(DIST) <= LIMIT:
+                break
+        print(f"sharded: {len(shard_dirs)} shard Workers, main keeps {count(DIST)} files")
+    for name, d, chars in shard_dirs:
+        if count(d) > LIMIT:
+            sys.exit(f"shard {name} too big")
+    # Two phases, so visitors never see a half-deployed site (13. 11. 2026: a deploy of 20+ minutes showed new listings
+    # linking to product pages the shards did not have yet, and the other order showed pages without their new CSS):
+    #   1. upload every Worker's new version without serving it (the slow part),
+    #   2. switch them all within seconds - main first, because it alone serves /assets/ and an /assets/ 404 is cached
+    #      for a year; it also still carries the previous CSS/JS (build state), so old pages keep their styles.
+    main_cfg = base_cfg("vterinka", DIST)
+    main_cfg["workers_dev"] = False
+    main_cfg["routes"] = [{"pattern": f"{ZONE}/*", "zone_name": ZONE}, {"pattern": f"www.{ZONE}/*", "zone_name": ZONE}]
+    workers = [("vterinka", main_cfg)]
+    for name, d, chars in shard_dirs:
+        cfg = base_cfg(name, d)
+        cfg["workers_dev"] = False
+        workers.append((name, cfg))          # no routes here: sync_routes() moves them through the API after the switch
+    t0 = time.time()
+    versions = []
+    for name, cfg in workers:
+        version = upload(cfg, name)
+        if version is None and name != "vterinka":     # a brand-new shard: create it now (no routes, so it serves nothing yet)
+            if wrangler(cfg, name).returncode:
+                sys.exit(f"creating {name} failed")
+            version = upload(cfg, name)
+        if version is None:
+            sys.exit(f"no version for {name}")
+        versions.append((name, cfg, version))
+    print(f"phase 1: {len(versions)} versions uploaded in {time.time() - t0:.0f}s, nothing served yet")
+    # phase 2: main alone first (~1 s; it serves /assets/), then every shard at the same moment, then the routes.
+    # Sequential switching took 28 s on 13. 11.; this way new listings and new product pages go live ~2 s apart.
+    t1 = time.time()
+    (mname, mcfg, mver), shards = versions[0], versions[1:]
+    err = activate(mcfg, mname, mver)
+    if err:
+        sys.exit(err)
+    with ThreadPoolExecutor(max_workers=max(1, len(shards))) as pool:
+        errs = list(pool.map(lambda w: activate(w[1], w[0], w[2]), shards))
+    print(f"phase 2: all Workers serve the new build {time.time() - t1:.1f}s after the first switch")
+    errs += sync_routes(shard_dirs)          # right after the switch: a moved character is unreachable for seconds only
+    errs.append(routes(mcfg, mname))          # vterinka.cz/* + www (unchanged: a no-op)
+    errs = [e for e in errs if e]
+    if errs:
+        sys.exit("; ".join(errs))
+    print(f"phase 2 done in {time.time() - t1:.1f}s (routes included)")
+
+
+if __name__ == "__main__":
+    main()

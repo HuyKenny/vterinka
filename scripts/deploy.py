@@ -110,9 +110,11 @@ def upload(cfg, name):
 
 def activate(cfg, name, version):
     """Serve the uploaded version (about a second). Returns an error text or None (runs in threads: no sys.exit here)."""
-    if wrangler(cfg, name, ("versions", "deploy", f"{version}@100%", "--yes", "--message", "vterinka build")).returncode:
-        return f"activating {name} failed"
-    return None
+    for attempt in range(4):      # 19. 11. 2026: a version uploaded seconds ago was "not found" (code 100146) - the API catches up
+        if not wrangler(cfg, name, ("versions", "deploy", f"{version}@100%", "--yes", "--message", "vterinka build")).returncode:
+            return None
+        time.sleep(15 * (attempt + 1))
+    return f"activating {name} failed"
 
 
 def routes(cfg, name):

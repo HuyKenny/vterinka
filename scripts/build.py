@@ -326,11 +326,11 @@ def main():
     # ---------------- rooms and categories
     for room in X.TOP:
         items = sorted(by_room.get(room, []), key=pop_key)
-        if not items or room not in S.nav_ok:
+        if not items:
             continue
         subs = [(k, by_cat[k]) for k in X.CATS if X.CATS[k][1] == room and k in S.cat_ok]
-        j = write_json(out, S, room, items)
-        paged(out, S, f"/{room}/", items, lambda: room_page(S, room, items, subs, j), "listings")
+        j = write_json(out, S, room, items)      # built even when thin: category breadcrumbs link it (noindex until it has public categories)
+        paged(out, S, f"/{room}/", items, lambda: room_page(S, room, items, subs, j), "listings", index=room in S.nav_ok)
     for k in X.CATS:
         ps = sorted(by_cat.get(k, []), key=pop_key)
         if not ps:
@@ -542,7 +542,7 @@ def product_page(S, p):
     if p["wmin"] and p["cat"] in X.WATCH_CATS:
         fit = (f'<div class="wristbox" data-w="{p["wmin"]:g}"><label for="wrist">{R.RULER_ICON}<b>Sedí mi na zápěstí?</b> Obvod zápěstí</label>'
                f'<input id="wrist" type="number" min="12" max="25" step="0.5" inputmode="decimal" placeholder="např. 17"><span>cm</span><output id="wristout" aria-live="polite"></output>'
-               '<p class="wrist-tip">Zápěstí změřte krejčovským metrem nebo proužkem papíru těsně pod kostičkou.</p></div>')
+               '<p class="wrist-tip">Zápěstí změřte krejčovským metrem nebo proužkem papíru v místě, kde budou hodinky ležet, těsně u zápěstní kůstky.</p></div>')
     dimfig = R.dims_svg(p["dims"])
 
     if len(var) > 1:
@@ -984,7 +984,7 @@ def home_page(S, products, by_room, by_cat, sale):
 {f'<section class="sec"><div class="sec__h"><h2>Teď ve slevě</h2><a href="/slevy/">Všechny slevy →</a></div>{row(sale)}</section>' if sale else ''}
 {shop_strip}
 {guides_sec}
-<section class="sec how"><h2>Jak Vteřinka funguje</h2><ol class="steps"><li><h3>Změřte zápěstí</h3><p>Proužkem papíru těsně pod kostičkou. Ve filtru pak nastavíme průměr pouzdra, který se na takovém zápěstí obvykle nosí.</p></li>
+<section class="sec how"><h2>Jak Vteřinka funguje</h2><ol class="steps"><li><h3>Změřte zápěstí</h3><p>Proužkem papíru v místě, kde budou hodinky ležet, těsně u zápěstní kůstky. Ve filtru pak nastavíme průměr pouzdra, který se na takovém zápěstí obvykle nosí.</p></li>
 <li><h3>Porovnejte obchody</h3><p>Stejný model podle referenčního čísla nebo EAN dáme vedle sebe od nejlevnějšího. Vidíte i nejnižší cenu za posledních 30 dní.</p></li>
 <li><h3>Kupte v e‑shopu</h3><p>Odkaz vás pošle rovnou do obchodu. Platíte tam a za stejnou cenu jako bez nás.</p></li></ol></section></div>"""
     ld = [{"@context": "https://schema.org", "@type": "WebSite", "name": "Vteřinka", "alternateName": "vterinka.cz", "url": BASE + "/",

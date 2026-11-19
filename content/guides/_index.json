@@ -1,0 +1,151 @@
+[
+ {
+  "slug": "velikost-hodinek-podle-zapesti",
+  "h1": "Velikost hodinek podle zápěstí: jak vybrat průměr pouzdra",
+  "title": "Velikost hodinek podle zápěstí: průměr pouzdra",
+  "date": "2026-11-19",
+  "related": [
+   "/panske-hodinky/",
+   "/damske-hodinky/",
+   "/unisex-hodinky/"
+  ],
+  "rules": {
+   "cat": [
+    "panske-hodinky",
+    "damske-hodinky",
+    "unisex-hodinky"
+   ]
+  }
+ },
+ {
+  "slug": "vodotesnost-hodinek-atm",
+  "h1": "Vodotěsnost hodinek: co znamená 3, 5, 10 a 20 ATM",
+  "title": "Vodotěsnost hodinek: co znamená 3, 5, 10 a 20 ATM",
+  "date": "2026-11-19",
+  "related": [
+   "/panske-hodinky/",
+   "/damske-hodinky/",
+   "/detske-hodinky/",
+   "/unisex-hodinky/"
+  ],
+  "rules": {
+   "cat": [
+    "panske-hodinky",
+    "damske-hodinky",
+    "detske-hodinky",
+    "unisex-hodinky"
+   ]
+  }
+ },
+ {
+  "slug": "automaticke-nebo-quartz",
+  "h1": "Automatické nebo quartzové hodinky: který strojek vybrat",
+  "title": "Automatické nebo quartzové hodinky: strojky",
+  "date": "2026-11-19",
+  "related": [
+   "/panske-hodinky/",
+   "/damske-hodinky/",
+   "/unisex-hodinky/",
+   "/kapesni-hodinky/"
+  ],
+  "rules": {
+   "cat": [
+    "panske-hodinky",
+    "damske-hodinky",
+    "unisex-hodinky"
+   ]
+  }
+ },
+ {
+  "slug": "jak-vybrat-snubni-prsteny",
+  "h1": "Jak vybrat snubní prsteny: kov, šířka, profil a gravírování",
+  "title": "Jak vybrat snubní prsteny: kov, šířka, profil",
+  "date": "2026-11-19",
+  "related": [
+   "/snubni-prsteny/",
+   "/zasnubni-prsteny/",
+   "/prsteny/",
+   "/poradna/jak-zjistit-velikost-prstenu/"
+  ],
+  "rules": {
+   "cat": [
+    "snubni-prsteny",
+    "zasnubni-prsteny"
+   ]
+  }
+ },
+ {
+  "slug": "jak-zjistit-velikost-prstenu",
+  "h1": "Jak zjistit velikost prstenu: obvod, průměr a převodní tabulka",
+  "title": "Jak zjistit velikost prstenu: obvod a tabulka",
+  "date": "2026-11-19",
+  "related": [
+   "/prsteny/",
+   "/snubni-prsteny/",
+   "/zasnubni-prsteny/"
+  ],
+  "rules": {
+   "cat": [
+    "prsteny",
+    "snubni-prsteny",
+    "zasnubni-prsteny"
+   ]
+  }
+ },
+ {
+  "slug": "jak-vycistit-stribrne-sperky",
+  "h1": "Jak vyčistit stříbrné šperky a nenechat je znovu ztmavnout",
+  "title": "Jak vyčistit stříbrné šperky: postup a skladování",
+  "date": "2026-11-19",
+  "related": [
+   "/prsteny/",
+   "/nausnice/",
+   "/nahrdelniky/",
+   "/sperkovnice/"
+  ],
+  "rules": {
+   "cat": [
+    "prsteny",
+    "nausnice",
+    "nahrdelniky",
+    "privesky",
+    "retizky",
+    "naramky"
+   ]
+  }
+ },
+ {
+  "slug": "jak-vybrat-damske-hodinky",
+  "h1": "Jak vybrat dámské hodinky: velikost, styl, řemínek a strojek",
+  "title": "Jak vybrat dámské hodinky: velikost a styl",
+  "date": "2026-11-19",
+  "related": [
+   "/damske-hodinky/",
+   "/unisex-hodinky/",
+   "/panske-hodinky/",
+   "/poradna/velikost-hodinek-podle-zapesti/"
+  ],
+  "rules": {
+   "cat": [
+    "damske-hodinky"
+   ]
+  }
+ },
+ {
+  "slug": "detske-hodinky-na-uceni-casu",
+  "h1": "Dětské hodinky na učení času: věk, ciferník a odolnost",
+  "title": "Dětské hodinky na učení času: věk a ciferník",
+  "date": "2026-11-19",
+  "related": [
+   "/detske-hodinky/",
+   "/panske-hodinky/",
+   "/unisex-hodinky/",
+   "/poradna/vodotesnost-hodinek-atm/"
+  ],
+  "rules": {
+   "cat": [
+    "detske-hodinky"
+   ]
+  }
+ }
+]

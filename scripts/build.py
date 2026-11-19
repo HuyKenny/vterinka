@@ -975,9 +975,13 @@ def home_page(S, products, by_room, by_cat, sale):
                 if len(out) == n:
                     break
         return out
-    hot = showcase([p for p in products if len(p["offers"]) > 1], cats=X.WATCH_CATS) or showcase(products, cats=X.WATCH_CATS)
-    jewels = showcase([p for p in products if len(p["offers"]) > 1], cats=X.JEWEL_CATS) or showcase(products, cats=X.JEWEL_CATS)
-    sale = showcase(sale)
+    # watches are the main business: 10 multi-shop watches (two full rows), filled up from the best single-shop ones; jewellery only one row of 5
+    multi = [p for p in products if len(p["offers"]) > 1]
+    hot = showcase(multi, n=10, per_cat=5, cats=X.WATCH_CATS)
+    if len(hot) < 10:
+        hot += [p for p in showcase(products, n=10, per_cat=5, cats=X.WATCH_CATS) if p not in hot][:10 - len(hot)]
+    jewels = showcase(multi, n=5, per_cat=2, cats=X.JEWEL_CATS) or showcase(products, n=5, per_cat=2, cats=X.JEWEL_CATS)
+    sale = showcase(sale, n=5, per_cat=3, cats=X.WATCH_CATS) or showcase(sale, n=5)
     tiles = S.tiles([(k, cat_name(k), len(by_cat[k])) for k in HOME_CATS if k in S.cat_ok], "cattiles", 96)
     hubs = [L for L in S.landings.values() if L["parent"] is None and L["index"]]
     wh = [L for L in hubs if "hodinky" in L["slug"]]
@@ -1003,9 +1007,9 @@ def home_page(S, products, by_room, by_cat, sale):
 <div class="wrap"><section class="sec"><div class="sec__h"><h2>Nejhledanější kategorie</h2><a href="/kategorie/">Všechny kategorie →</a></div>{tiles}</section>
 <section class="sec"><div class="sec__h"><h2>Hodinky ve více obchodech najednou</h2><a href="/panske-hodinky/">Pánské hodinky →</a></div>{row(hot)}</section>
 {f'<section class="sec"><div class="sec__h"><h2>Hodinky podle strojku a stylu</h2></div>{picks}</section>' if wh else ''}
-{f'<section class="sec"><div class="sec__h"><h2>Šperky</h2><a href="/kategorie/">Všechny šperky →</a></div>{row(jewels)}</section>' if jewels else ''}
+{f'<section class="sec"><div class="sec__h"><h2>Hodinky ve slevě</h2><a href="/slevy/">Všechny slevy →</a></div>{row(sale)}</section>' if sale else ''}
+{f'<section class="sec"><div class="sec__h"><h2>A k hodinkám šperky</h2><a href="/sperky/">Všechny šperky →</a></div>{row(jewels)}</section>' if jewels else ''}
 {f'<section class="sec"><div class="sec__h"><h2>Šperky podle kovu a kamene</h2></div>{jpicks}</section>' if jh else ''}
-{f'<section class="sec"><div class="sec__h"><h2>Teď ve slevě</h2><a href="/slevy/">Všechny slevy →</a></div>{row(sale)}</section>' if sale else ''}
 {shop_strip}
 {guides_sec}
 <section class="sec how"><h2>Jak Vteřinka funguje</h2><ol class="steps"><li><h3>Změřte zápěstí</h3><p>Proužkem papíru v místě, kde budou hodinky ležet, těsně u zápěstní kůstky. Ve filtru pak nastavíme průměr pouzdra, který se na takovém zápěstí obvykle nosí.</p></li>

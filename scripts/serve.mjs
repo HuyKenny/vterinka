@@ -3,6 +3,7 @@
 import { createServer } from "node:http";
 import { readFileSync, existsSync, statSync } from "node:fs";
 import { join, extname, normalize } from "node:path";
+import { brotliCompressSync, constants as Z } from "node:zlib";
 
 const root = "dist", port = +(process.argv[2] || 8765);
 const MIME = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml", ".webp": "image/webp",
@@ -22,5 +23,10 @@ createServer((req, res) => {
   let status = 200;
   if (!existsSync(f)) { f = join(root, "404.html"); status = 404; }
   const h = Object.fromEntries(headersFor(p)); h["Content-Type"] = MIME[extname(f)] || "application/octet-stream";
-  res.writeHead(status, h); res.end(readFileSync(f));
+  let body = readFileSync(f);
+  // Cloudflare sends text as brotli: do the same, or Lighthouse measures 4-5x larger HTML/CSS/JS than visitors get
+  if (/^(text|application\/(json|xml|manifest)|image\/svg)/.test(h["Content-Type"]) && /\bbr\b/.test(req.headers["accept-encoding"] || "")) {
+    body = brotliCompressSync(body, { params: { [Z.BROTLI_PARAM_QUALITY]: 5 } }); h["Content-Encoding"] = "br"; h["Vary"] = "Accept-Encoding";
+  }
+  res.writeHead(status, h); res.end(body);
 }).listen(port, () => console.log("serving dist on " + port));

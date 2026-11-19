@@ -515,6 +515,6 @@ footer .logo img{width:104px}
 .ptag b,.ptag--xl b,.tprice,.hero__stats dt{font-family:var(--ff);font-variant-numeric:lining-nums tabular-nums}
 .ptag--xl b{font-weight:700;font-size:1.6rem}
 /* below the fold: the browser skips rendering until it scrolls near (faster first paint on phones) */
-footer,.faq{content-visibility:auto;contain-intrinsic-size:auto 600px}
+.faq{content-visibility:auto;contain-intrinsic-size:auto 600px}   /* not the footer: axe then misreads its dark background as ivory */
 /* iOS Safari zooms the page into any form field under 16 px: sort, filter ranges and the wrist field stay at 16 px on phones */
 @media (max-width:860px){input,select,textarea{font-size:16px}}

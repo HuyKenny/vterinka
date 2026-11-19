@@ -168,6 +168,87 @@
    "lw": 312,
    "lh": 120,
    "logo_src": 22533
+  },
+  {
+   "id": "eppi",
+   "name": "Eppi.cz",
+   "domain": "eppi.cz",
+   "network": "ehub",
+   "a_bid": "a7bce6ab",
+   "feed_key": "eh_eppi",
+   "color": "#8A6D3B"
+  },
+  {
+   "id": "francobene",
+   "name": "Franco Bene",
+   "domain": "francobene.cz",
+   "network": "ehub",
+   "a_bid": "e101cf7d",
+   "feed_key": "eh_francobene",
+   "color": "#444444"
+  },
+  {
+   "id": "ocelovesperky",
+   "name": "Ocelové šperky",
+   "domain": "ocelovesperky1.cz",
+   "network": "ehub",
+   "a_bid": "3bd9c184",
+   "feed_key": "eh_ocelovesperky",
+   "color": "#2C7BE5"
+  },
+  {
+   "id": "brunoshop",
+   "name": "Brunoshop.cz",
+   "domain": "brunoshop.cz",
+   "network": "ehub",
+   "a_bid": "925e22e1",
+   "feed_key": "eh_brunoshop",
+   "color": "#7A5C3E"
+  },
+  {
+   "id": "marre",
+   "name": "Marre.cz",
+   "domain": "marre.cz",
+   "network": "ehub",
+   "a_bid": "75b5dc73",
+   "feed_key": "eh_marre",
+   "color": "#B08D57"
+  },
+  {
+   "id": "olivie",
+   "name": "Olivie.cz",
+   "domain": "olivie.cz",
+   "network": "ehub",
+   "a_bid": "f9924854",
+   "feed_key": "eh_olivie",
+   "color": "#5B3A7A"
+  },
+  {
+   "id": "zlatnictvinoemi",
+   "name": "Zlatnictví Noemi",
+   "domain": "zlatnictvinoemi.cz",
+   "network": "ehub",
+   "a_bid": "19c5d1a3",
+   "feed_key": "eh_zlatnictvinoemi",
+   "color": "#C2185B"
+  },
+  {
+   "id": "klenotyaurum",
+   "name": "Klenoty Aurum",
+   "domain": "klenotyaurum.cz",
+   "network": "affiliateport",
+   "offer": "451",
+   "feed_key": "ap_451",
+   "color": "#B08D57"
+  },
+  {
+   "id": "zaminutu",
+   "name": "Zaminutu.cz",
+   "domain": "zaminutu.cz",
+   "network": "affiliateport",
+   "offer": "1177",
+   "feed_key": "ap_1177",
+   "color": "#E2231A"
   }
  ]
 }

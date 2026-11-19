@@ -18,3 +18,8 @@ def load():
             if "=" in line and not line.startswith("#"):
                 k, v = line.split("=", 1)
                 os.environ.setdefault(k, v.strip().strip("\"'"))
+
+    feeds = CRED / ".vterinka-feeds.json"        # {feed_key: URL}; URLs carry tokens, so they live only here and in the FEEDS_JSON secret
+    if feeds.exists():
+        import json
+        os.environ.setdefault("FEEDS_JSON", json.dumps(json.load(feeds.open()), separators=(",", ":")))

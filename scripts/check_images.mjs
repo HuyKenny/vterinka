@@ -29,6 +29,7 @@ const sm = readFileSync(join(root, "sitemap-products-1.xml"), "utf8").match(/<lo
 const pick = sm.filter((_, i) => i % Math.max(1, Math.floor(sm.length / 14)) === 0).slice(0, 14).map((l) => new URL(l.slice(5, -6)).pathname);
 const pages = ["/", "/panske-hodinky/", "/damske-hodinky/", "/prsteny/", "/nausnice/", ...pick].filter((p) => existsSync(join(root, p, "index.html")));
 const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH || "/usr/bin/google-chrome", args: ["--no-sandbox", "--disable-gpu"] });
+const report = [];
 for (const mobile of [false, true]) {
   const page = await browser.newPage();
   await page.setViewport({ width: mobile ? 390 : 1366, height: 900, isMobile: mobile, hasTouch: mobile });

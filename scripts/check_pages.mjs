@@ -30,6 +30,7 @@ for (const w of widths) {
       const W = document.documentElement.clientWidth, bad = [];
       if (document.documentElement.scrollWidth > W + 1) bad.push(`page scrollWidth ${document.documentElement.scrollWidth} > ${W}`);
       for (const e of document.querySelectorAll("body *")) {
+        if (e.closest("[data-scroll]")) continue;      // intentional horizontal scrollers (chip rows): their items may run past the edge
         const r = e.getBoundingClientRect();
         if (r.width && r.right > W + 1 && getComputedStyle(e).position !== "fixed") { bad.push(`${e.tagName}.${String(e.className).slice(0, 40)} right=${Math.round(r.right)}`); }
         const s = getComputedStyle(e);

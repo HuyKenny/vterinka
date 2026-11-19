@@ -358,6 +358,8 @@ def attrs(title, color_field, desc, path="", cat=None):
         mats.remove("ocel")
     if ("bile-zlato" in mats or "ruzove-zlato" in mats) and "zlato" not in mats:
         mats.append("zlato")
+    if cat in WATCH_CATS and not re.search(r"\b(585|750|14 ?k|18 ?k|karat\w*|ryzi)\b", t + " " + d):
+        mats = [m for m in mats if m not in ("zlato", "ruzove-zlato", "bile-zlato")]    # "rose gold" on a watch is a colour, not gold
     styles = [s for s, _, rx in STYLES_RX if rx.search(t) or rx.search(d[:300])]
     feats = [s for s, _, rx in FEATURES_RX if rx.search(t) or (s not in GENDER_FEATS and s not in EARRING_FEATS and rx.search(d[:300]))]
     if cat in WATCH_CATS or cat is None and WATCH_RX.search(t):
@@ -375,8 +377,14 @@ def attrs(title, color_field, desc, path="", cat=None):
 
 
 # ------------------------------------------------------------------ sizes: case diameter (mm) and ring size (EU)
-RX_CASE = re.compile(r"(?:pouzdr\w*|prumer\w*|ciferni\w*|velikost pouzdra|case|lunet\w*|⌀|ø)\D{0,18}?(\d{2}(?:[,.]\d{1,2})?)\s*mm", I)
-RX_MM = re.compile(r"\b(\d{2}(?:[,.]\d{1,2})?)\s*mm\b", I)
+NUMMM = r"(\d{2}(?:[,.]\d{1,2})?)\s*mm"
+# the CASE, labelled: "průměr pouzdra 40 mm", "pouzdro: 42 mm", "obálka: šířka 42 mm", "velikost pouzdra 38 mm", "case 41 mm", "40 mm pouzdro"
+RX_CASE = [re.compile(r"(?:prumer|velikost|sirka|diameter|size)\s+(?:pouzdr\w*|obalk\w*|case|hodinek)\s*[:\-]?\s*(?:cca\s*)?" + NUMMM, I),
+           re.compile(r"(?:pouzdr\w*|obalk\w*|case)\s*[:\-]\s*(?:sirka|prumer|velikost)?\s*[:\-]?\s*(?:cca\s*)?" + NUMMM, I),
+           re.compile(NUMMM + r"\s*(?:pouzdr\w*|case\b)", I)]
+# a bare "40 mm" in the TITLE is the case (Allegro "Orient Mako RA-AC0Q01B10B 39,90 mm 20ATM"), unless a strap / lug / dial / thickness word stands right before it
+RX_MM = re.compile(r"(?<![\d,.])" + NUMMM + r"\b", I)
+NOT_CASE = re.compile(r"(remin\w*|remen\w*|pas\w*|tah\w*|trn\w*|ciferni\w*|kotouc\w*|tloust\w*|vysk\w*|delk\w*|sirk\w* (remin|pas|tah)\w*|skl\w*|lug|strap|band)\W{0,4}(\w+\W{0,3}){0,2}$", I)
 RX_RING = [re.compile(r"\beu:?\s*(\d{2})(?:\s*[-–]\s*\d{2})?\)", I), re.compile(r"\bobvod\w*:?\s*(\d{2})\s*mm", I),
            re.compile(r"\bvelikost\w*:?\s*(\d{2})\b", I), re.compile(r"\b(4[4-9]|5\d|6[0-8])\s*mm\b", I)]
 
@@ -392,11 +400,22 @@ def dims(title, desc, cat):
     d = fold((desc or "")[:1500])
     out = {}
     if cat in WATCH_CATS:
-        m = RX_CASE.search(t) or RX_MM.search(t) or RX_CASE.search(d)
-        if m:
-            v = num(m.group(1))
-            if 18 <= v <= 56:
-                out["w"] = v
+        v = None
+        for src in (t, d):
+            for rx in RX_CASE:
+                m = rx.search(src)
+                if m:
+                    v = num(m.group(1))
+                    break
+            if v:
+                break
+        if v is None:
+            for m in RX_MM.finditer(t):
+                if not NOT_CASE.search(t[max(0, m.start() - 30):m.start()]):
+                    v = num(m.group(1))
+                    break
+        if v and 24 <= v <= 55:
+            out["w"] = v
     elif cat in ("prsteny", "snubni-prsteny", "zasnubni-prsteny"):
         for rx in RX_RING:
             m = rx.search(t)

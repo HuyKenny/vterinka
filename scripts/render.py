@@ -345,7 +345,7 @@ class Site:
         filt = self.filters(items, facets)
         n = len(items)
         cats = facets.get("cats")
-        refine = (f'<nav class="refine" aria-label="{E(facets.get("cats_label", "Upřesnit"))}"><span>{E(facets.get("cats_label", "Upřesnit"))}:</span>'
+        refine = (f'<nav class="refine" data-scroll aria-label="{E(facets.get("cats_label", "Upřesnit"))}"><span>{E(facets.get("cats_label", "Upřesnit"))}:</span>'
                   + "".join(f'<a href="{u}">{E(t)}</a>' for u, t, _ in cats[:40]) + "</nav>") if cats else ""
         return (f'<div class="layout">{refine}{filt}<div class="factive" id="factive" hidden></div><div class="results"><div class="listhead"><p><b id="count">{n}</b> {plural(n, "kus", "kusy", "kusů")}</p>'
                 f'<label class="sort">Řadit <select id="sort"><option value="pop">doporučené</option><option value="price"{" selected" if order == "price" else ""}>nejlevnější</option>'

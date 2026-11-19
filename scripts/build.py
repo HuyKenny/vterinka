@@ -89,7 +89,8 @@ class Out:
             self.sitemap[group].append(path)
 
 
-CAT_CAP = int(os.environ.get("VT_CAT_CAP", "1500"))   # Kenny 12. 11. 2026: enough to choose from, not everything
+CAT_CAP = int(os.environ.get("VT_CAT_CAP", "4000"))   # jewellery: enough to choose from; watches (the core of the site) are not capped (WATCH_CAP)
+WATCH_CAP = int(os.environ.get("VT_WATCH_CAP", "0"))
 MIN_CAT = 5                                              # a category is public (nav, tiles, sitemap) from this many products (Kenny 16. 11.: 5 is enough, feeds fill it later)
 
 
@@ -111,7 +112,8 @@ def cap_categories(products, cap):
         by_cat[p.get("sub") or p["cat"]].append(p)     # a subcategory has its own cap: big categories show more of the feed
     keep, capped = [], {}
     for k, ps in by_cat.items():
-        if len(ps) <= cap:
+        cap = WATCH_CAP if k in X.WATCH_CATS else CAT_CAP
+        if not cap or len(ps) <= cap:
             keep += ps
             continue
         ps = sorted(ps, key=lambda p: (-quality(p), p["id"]))

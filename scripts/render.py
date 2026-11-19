@@ -85,17 +85,47 @@ def img_url(u, size="card"):
     if not u:
         return u
     card = size == "card"
+    thumb = size == "thumb"      # 64 px gallery thumbnails
     if u.startswith(DOTIDOT):        # dotidot answers every image with a 302 to its storage host: skip the hop
         u = "https://dotidot-production-control-app-control-app-images.storage.dotidot.io/" + u[len(DOTIDOT):]
     if "a.allegroimg.com/original/" in u:     # Allegro renditions by path (wsrv.nl cannot fetch Allegro): s360 cards, s720 detail
-        return u.replace("/original/", "/s360/" if card else "/s720/")
+        return u.replace("/original/", "/s128/" if thumb else "/s360/" if card else "/s720/")
     if "img2.ans-media.com/i/" in u:        # Answear renditions by path: 855x1290 (feed) -> 400x600 for cards (36 kB WebP)
-        return re.sub(r"/i/\d+x\d+/", "/i/400x600/" if card else "/i/855x1290/", u)
+        return re.sub(r"/i/\d+x\d+/", "/i/128x192/" if thumb else "/i/400x600/" if card else "/i/855x1290/", u)
     if "cdn.myshoptet.com" in u and "/user/shop/orig/" in u:
-        return u.replace("/user/shop/orig/", "/user/shop/detail/" if card else "/user/shop/big/")
+        return u.replace("/user/shop/orig/", "/user/shop/detail/" if (card or thumb) else "/user/shop/big/")
     if u.startswith("https://") and "cdn.myshoptet.com" not in u and "wsrv.nl" not in u:
-        return f"https://wsrv.nl/?url={quote(u, safe='')}&w={480 if card else 960}&we&output=webp&q=78"
+        return f"https://wsrv.nl/?url={quote(u, safe='')}&w={128 if thumb else 480 if card else 960}&we&output=webp&q=78"
     return u
+
+
+# Slot widths for `sizes`: two cards per row on phones, ~240 px cards on desktop; the gallery is full width below 980 px.
+CARD_SIZES = "(max-width:640px) 46vw, 260px"
+MAIN_SIZES = "(max-width:980px) 92vw, 600px"
+_SRCSET = {   # host -> (pattern, {size: [(width, replacement), ...]}); renditions measured 19. 11. 2026
+    "a.allegroimg.com/": (r"/s\d+/", {"card": [(240, "/s240/"), (360, "/s360/"), (512, "/s512/")],
+                                      "main": [(360, "/s360/"), (512, "/s512/"), (720, "/s720/")]}),
+    "img2.ans-media.com/i/": (r"/i/\d+x\d+/", {"card": [(300, "/i/300x450/"), (400, "/i/400x600/")],
+                                                "main": [(400, "/i/400x600/"), (540, "/i/540x813/"), (855, "/i/855x1290/")]}),
+    "wsrv.nl/": (r"&w=\d+", {"card": [(240, "&w=240"), (360, "&w=360"), (480, "&w=480")],
+                             "main": [(480, "&w=480"), (720, "&w=720"), (960, "&w=960")]}),
+}
+
+
+def img_srcset(u, size="card"):
+    """srcset for a shop picture (same renditions as img_url, several widths): a phone takes the smallest one that fills
+    its slot instead of the desktop size. Empty when the host has no width presets (the plain src is used)."""
+    src = img_url(u, size)
+    for host, (rx, sizes) in _SRCSET.items():
+        if src and host in src and re.search(rx, src):
+            return ", ".join(re.sub(rx, rep, src, count=1) + f" {w}w" for w, rep in sizes[size])
+    return ""
+
+
+def img_host(u):
+    """Origin of a picture (for preconnect and the CSP img-src list)."""
+    m = re.match(r"https://[^/?#]+", u or "")
+    return m.group(0) if m else ""
 
 
 def pager_html(path, cur, pages, total=0, per=0):
@@ -185,8 +215,10 @@ class Site:
     def url(self, path):
         return self.base + path
 
-    def layout(self, path, title, desc, body, crumbs=None, noindex=False, jsonld=None, preload_img=None, og_img=None, full=False):
-        title, desc = shorten(title, 68, SUFFIX), shorten(desc, 160)      # BEFORE the " – strana N" suffix, so paginated titles stay distinct
+    def layout(self, path, title, desc, body, crumbs=None, noindex=False, jsonld=None, preload_img=None, og_img=None, full=False, og_type="website"):
+        pn = self.pg[1] if self.pg and self.pg[1] > 1 else 0      # room for " – strana N" / "Strana N: " (SEO lint 19. 11.: 405 paginated titles > 75)
+        title = shorten(title, 68 - (len(f" – strana {pn}") if pn else 0), SUFFIX)       # BEFORE the suffix, so paginated titles stay distinct
+        desc = shorten(desc, 160 - (len(f"Strana {pn}: ") if pn else 0))
         robots = "noindex,follow" if (noindex or self.pg_noindex or self.env != "production") else "index,follow,max-image-preview:large"
         if self.pg and self.pg[1] > 1:
             n = self.pg[1]
@@ -208,7 +240,14 @@ class Site:
                            "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": self.url(u)} for i, (n, u) in enumerate(crumbs)]})
             cr = '<nav class="crumbs" aria-label="Drobečková navigace">' + "<i>/</i>".join(
                 f'<a href="{u}">{E(n)}</a>' if i < len(crumbs) - 1 else f"<span>{E(n)}</span>" for i, (n, u) in enumerate(crumbs)) + "</nav>"
-        pre = f'<link rel="preload" as="image" href="{E(preload_img)}" fetchpriority="high">' if preload_img else ""
+        # preload_img: "url" or (url, srcset, sizes) - with a srcset the phone preloads only the rendition it will show
+        pre_u, pre_ss, pre_sz = (preload_img if isinstance(preload_img, tuple) else (preload_img, "", ""))
+        pre = ""
+        if pre_u:
+            pre = (f'<link rel="preload" as="image" href="{E(pre_u)}"' + (f' imagesrcset="{E(pre_ss)}" imagesizes="{E(pre_sz)}"' if pre_ss else "")
+                   + ' fetchpriority="high">')
+        host = img_host(pre_u) if pre_u and pre_u.startswith("https://") else ""
+        pc = f'<link rel="preconnect" href="{host}">' if host else ('<link rel="preconnect" href="https://wsrv.nl">' if "wsrv.nl/" in body else "")
         ga = ""
         if self.ga and self.env == "production":
             boot = ('window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}'
@@ -225,16 +264,16 @@ class Site:
             content = content.replace("<!--crumbs-->", cr, 1)
         ok = self.nav_ok
         cok = getattr(self, "cat_ok", None)
-        nav = "".join(f'<li><a href="/{k}/"><img src="/img/ic/{X.ICON[k]}.webp" alt="" width="36" height="36" loading="lazy">{E(X.CATS[k][0])}</a></li>'
-                      for k in NAV if cok is None or k in cok) + '<li><a href="/kategorie/"><img src="/img/ic/sperky.webp" alt="" width="36" height="36" loading="lazy">Vše</a></li>'
+        nav = "".join(f'<li><a href="/{k}/"><img src="/img/ic/72/{X.ICON[k]}.webp" alt="" width="36" height="36" loading="lazy">{E(X.CATS[k][0])}</a></li>'
+                      for k in NAV if cok is None or k in cok) + '<li><a href="/kategorie/"><img src="/img/ic/72/sperky.webp" alt="" width="36" height="36" loading="lazy">Vše</a></li>'
         more = "".join(f'<li><a href="/{k}/">{E(X.CATS[k][0])}</a></li>' for k in FOOT_DEPTS if cok is None or k in cok)
         og = og_img or f"{self.base}/img/ui/og.png"
         n_shops = self.stats["shops"]
         return f"""<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)}</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{self.url(path)}"><meta name="robots" content="{robots}">
-<meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{self.url(path)}"><meta property="og:type" content="website"><meta property="og:locale" content="cs_CZ"><meta property="og:site_name" content="Vteřinka"><meta property="og:image" content="{E(og)}"><meta name="twitter:card" content="summary_large_image">
+<meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{self.url(path)}"><meta property="og:type" content="{og_type}"><meta property="og:locale" content="cs_CZ"><meta property="og:site_name" content="Vteřinka"><meta property="og:image" content="{E(og)}"><meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#1F3A5F"><link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192"><link rel="apple-touch-icon" href="/favicon-180.png"><link rel="manifest" href="/site.webmanifest">
-<link rel="preload" href="/fonts/bodoni-cs.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/hanken-cs.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/assets/{self.css}"><link rel="preconnect" href="https://wsrv.nl">{pre}{SPECULATION}{ga}{head_ld}</head><body>
+<link rel="preload" href="/fonts/bodoni-cs.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/hanken-cs.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/assets/{self.css}">{pc}{pre}{SPECULATION}{ga}{head_ld}</head><body>
 <a class="skip" href="#main">Přeskočit na obsah</a>
 <header class="top"><div class="wrap"><a class="logo" href="/" aria-label="Vteřinka – úvod">{LOGO}</a>
 <form class="search" role="search" action="/hledat/" method="get"><label class="sr" for="q">Hledat hodinky, šperky, značku nebo obchod</label>{SEARCH_ICON}<input id="q" name="q" type="search" placeholder="Prim automat, Casio Edifice, stříbrné náušnice…" autocomplete="off"><button type="submit">Hledat</button><div class="sugg" id="sugg" role="listbox"></div></form>
@@ -288,7 +327,11 @@ class Site:
         n = len(p["offers"])
         href = f'/produkt/{p["slug"]}/'
         img = E(img_url(p["img"]) or "/img/ui/placeholder.svg")
-        load = ' loading="lazy" decoding="async"' if lazy else ' fetchpriority="high"'
+        ss = img_srcset(p["img"]) if p["img"] else ""
+        if ss:
+            img += f'" srcset="{E(ss)}" sizes="{CARD_SIZES}'
+        # lazy=True below the fold; "high" = the first row (LCP candidates), False = eager without priority
+        load = ' loading="lazy" decoding="async"' if lazy is True else (' fetchpriority="high"' if lazy == "high" else "")
         d = self.discount(p)
         sale = f'<span class="flag">−{d} %</span>' if d >= 10 else ""
         tp = self.tape(p)
@@ -316,7 +359,7 @@ class Site:
                 [f"{k}:{v}" for k, vs in (p.get("fx") or {}).items() for v in vs]]
 
     def grid(self, items, first_lazy=True, cls="grid"):
-        return f'<ul class="{cls}">' + "".join(self.card(p, lazy=first_lazy or i > 3) for i, p in enumerate(items)) + "</ul>"
+        return f'<ul class="{cls}">' + "".join(self.card(p, lazy=True if (first_lazy or i > 3) else ("high" if i < 2 else False)) for i, p in enumerate(items)) + "</ul>"
 
     def faq(self, qa):
         if not qa:
@@ -352,7 +395,7 @@ class Site:
         return (f'<div class="layout">{refine}{filt}<div class="factive" id="factive" hidden></div><div class="results"><div class="listhead"><p><b id="count">{n}</b> {plural(n, "kus", "kusy", "kusů")}</p>'
                 f'<label class="sort">Řadit <select id="sort"><option value="pop">doporučené</option><option value="price"{" selected" if order == "price" else ""}>nejlevnější</option>'
                 f'<option value="pricedesc">nejdražší</option><option value="sale">největší sleva</option></select></label></div>'
-                f'<ul class="grid grid--list" id="plist" data-json="{json_url}" data-page="{cur}" data-per="{PER_PAGE}" data-order="{order}">{"".join(self.card(p, lazy=i > 3) for i, p in enumerate(chunk))}</ul>'
+                f'<ul class="grid grid--list" id="plist" data-json="{json_url}" data-page="{cur}" data-per="{PER_PAGE}" data-order="{order}">{"".join(self.card(p, lazy=True if i > 3 else ("high" if i < 2 else False)) for i, p in enumerate(chunk))}</ul>'
                 f'{pager_html(path, cur, pages, n, PER_PAGE) if path else ""}</div></div>')
 
     @staticmethod

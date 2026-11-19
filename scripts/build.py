@@ -48,6 +48,12 @@ SUFFIX = R.SUFFIX
 HOME = ("Vteřinka", "/")
 
 
+def ld_text(t):
+    """Shop description for structured data: feed separators (" - - ", "--", runs of dashes/spaces) collapsed into one dash."""
+    t = re.sub(r"(?:\s*[-–—]\s*){2,}", " – ", t or "")
+    return re.sub(r"\s{2,}", " ", t).strip(" –-")
+
+
 def log(m):
     print(m, file=sys.stderr, flush=True)
 
@@ -238,8 +244,9 @@ def main():
         p["page"] = not MAX_PRODUCTS or i < MAX_PRODUCTS
         p["index"] = len(p["offers"]) > 1 or len(p["desc"]) >= 120 or bool(p["variants"])
     name_count = Counter(p["nkey"] for p in products)
+    title_count = Counter(title_core(p, 68 - len(SUFFIX)) for p in products)    # shortened names collide too (SEO lint 19. 11.: 469)
     for p in products:
-        p["dup"] = name_count[p["nkey"]] > 1
+        p["dup"] = name_count[p["nkey"]] > 1 or title_count[title_core(p, 68 - len(SUFFIX))] > 1
     gone = C.gone_products(products, state, state.get("snap", {}))
     products = [p for p in products if p["page"]]      # staging cap: listings must not link pages that are not built
     go_tpl, _go_stats = GL.local_go(products)
@@ -420,7 +427,14 @@ def main():
            "  Cross-Origin-Opener-Policy: same-origin\n  Cross-Origin-Resource-Policy: same-site\n  X-Permitted-Cross-Domain-Policies: none\n"
            "  Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), "
            "midi=(), payment=(), usb=(), xr-spatial-tracking=(), interest-cohort=()\n")
-    csp = ("  Content-Security-Policy: default-src 'none'; img-src 'self' https: data:; "
+    # img-src: only the hosts our pages really load pictures from (shop CDNs, their originals as the fallback, wsrv.nl).
+    # GTM can inject any tag, so with a GTM container (or an implausible host list) it stays the generic https:.
+    hosts = sorted({R.img_host(v) for p in products for u in [p["img"], *p["imgs"]] if u for v in (u, R.img_url(u, "card"), R.img_url(u, "main"))} - {""})
+    if GA4:
+        hosts += ["https://*.google-analytics.com", "https://*.googletagmanager.com", "https://*.g.doubleclick.net", "https://www.google.com", "https://www.google.cz"]
+    img_src = "https:" if (GA4.startswith("GTM-") or not hosts or len(hosts) > 80) else " ".join(hosts)
+    log(f"CSP img-src: {len(hosts)} hosts")
+    csp = ("  Content-Security-Policy: default-src 'none'; img-src 'self' data: " + img_src + "; "
            "script-src 'self' 'inline-speculation-rules' https://www.googletagmanager.com " + " ".join(f"'sha256-{h}'" for h in sorted(out.script_hashes)) + "; "
            "connect-src 'self' https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; style-src 'self' 'unsafe-inline'; "
            "font-src 'self'; manifest-src 'self'; object-src 'none'; frame-src 'none'; worker-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; "
@@ -490,6 +504,12 @@ def offer_rows(S, offers, best_price, label=None):
     return "".join(rows)
 
 
+def title_core(p, room):
+    """Product <title> without the site name: "<name> – srovnání cen" when it fits, else the name shortened from the middle."""
+    core = f"{p['name']} – srovnání cen" if len(p["offers"]) > 1 else f"{p['name']} – cena a parametry"
+    return core if len(core) <= room else R.shorten_mid(p["name"], room)
+
+
 def product_page(S, p):
     k = p["cat"]
     if p.get("sub") in S.cat_ok:
@@ -500,21 +520,21 @@ def product_page(S, p):
     bs = S.shop(best["shop"])
     code = re.sub(r"\D", "", p["ean"])[-4:] or p["slug"][-4:]
     uniq = f" (kód {code})" if p.get("dup") else ""
-    room = 68 - len(SUFFIX) - len(uniq)
-    core = f"{p['name']} – srovnání cen" if n > 1 else f"{p['name']} – cena a parametry"
-    title = (core if len(core) <= room else R.shorten_mid(p["name"], room)) + uniq + SUFFIX
+    title = title_core(p, 68 - len(SUFFIX) - len(uniq)) + uniq + SUFFIX
     sl = X.size_label(p["dims"])
     desc = (f"{p['name']}: {'od ' + R.kc(p['price']) + ' v ' + str(n) + ' obchodech' if n > 1 else 'cena ' + R.kc(p['price']) + ' v obchodě ' + bs['name']}"
             f"{', ' + sl if sl else ''}{', ' + str(len(var)) + ' variant' if len(var) > 1 else ''}. Porovnejte nabídky a kupte přímo v e‑shopu.")
     imgs = [p["img"]] + p["imgs"] if p["img"] else p["imgs"]
     imgs = [u for u in imgs if u][:7]
     orig_imgs = imgs      # structured data, og:image and the image sitemap name the shop's own full-size pictures
-    thumb_srcs = [R.img_url(u, "card") for u in imgs]
+    thumb_srcs = [R.img_url(u, "thumb") for u in imgs]
     imgs = [R.img_url(u, "main") for u in imgs]
     main_img = E(imgs[0]) if imgs else "/img/ui/placeholder.svg"
     thumbs = "".join(f'<button type="button" data-src="{E(u)}"{" class=on" if i == 0 else ""} aria-label="Obrázek {i + 1}"><img src="{E(thumb_srcs[i])}" alt="" loading="lazy" referrerpolicy="no-referrer" width="64" height="64"></button>'
                      for i, u in enumerate(imgs)) if len(imgs) > 1 else ""
-    gal = f'<div class="gal"><div class="gal__main"><img id="gmain" src="{main_img}" alt="{E(p["name"])}" referrerpolicy="no-referrer" width="640" height="640" fetchpriority="high"></div><div class="thumbs">{thumbs}</div></div>'
+    main_ss = R.img_srcset(orig_imgs[0], "main") if imgs else ""
+    ss_attr = f' srcset="{E(main_ss)}" sizes="{R.MAIN_SIZES}"' if main_ss else ""
+    gal = f'<div class="gal"><div class="gal__main"><img id="gmain" src="{main_img}"{ss_attr} alt="{E(p["name"])}" referrerpolicy="no-referrer" width="640" height="640" fetchpriority="high"></div><div class="thumbs">{thumbs}</div></div>'
 
     meta = []
     if p["brand"] and X.slugify(p["brand"]) in S.ctx["brands"]:
@@ -595,13 +615,15 @@ def product_page(S, p):
     sim_html = f'<section class="sec"><div class="sec__h"><h2>Podobné kusy</h2><a href="/{k}/">Celá kategorie →</a></div>{S.grid(sim)}</section>' if sim else ""
 
     ld = {"@context": "https://schema.org", "@type": "Product", "name": p["name"], "image": orig_imgs[:3] or None, "url": S.url(f"/produkt/{p['slug']}/"),
-          "description": (p["desc"][:300] or p["name"]), "category": cat_name(k),
+          "description": ld_text(p["desc"])[:300] or p["name"], "category": cat_name(k),
           "offers": {"@type": "AggregateOffer", "priceCurrency": "CZK", "lowPrice": p["price"], "highPrice": max(o["price"] for o in p["offers"]),
                      "offerCount": max(n, len(var)), "availability": "https://schema.org/InStock"}}
     if p["brand"]:
         ld["brand"] = {"@type": "Brand", "name": p["brand"]}
     if p["ean"] and len(p["ean"]) == 13:
         ld["gtin13"] = p["ean"]
+    if p.get("mpn") and re.fullmatch(r"[\w./ -]{3,40}", p["mpn"]):
+        ld["mpn"] = ld["sku"] = p["mpn"]
     if p["colors"]:
         ld["color"] = X.COLOR_NAME[p["colors"][0]]
     if p["mats"]:
@@ -614,7 +636,7 @@ def product_page(S, p):
     body = (f'<div class="prod">{gal}<div class="prod__info"><h1>{E(p["name"])}</h1><div class="meta">{"".join(meta)}</div>{sizes_html}{bestbox}{fit}{offers_html}</div></div>'
             f'<div class="prod__more"><div>{dimfig}{spec_html}</div><div>{desc_html}{hist_html}</div></div>{sim_html}')
     cr = crumbs_for(k) + [(R.shorten(p["name"], 60), f"/produkt/{p['slug']}/")]
-    return S.layout(f"/produkt/{p['slug']}/", title, desc, body, crumbs=cr, jsonld=[ld], preload_img=imgs[0] if imgs else None,
+    return S.layout(f"/produkt/{p['slug']}/", title, desc, body, crumbs=cr, jsonld=[ld], preload_img=(imgs[0], main_ss, R.MAIN_SIZES) if imgs else None, og_type="product",
                     og_img=orig_imgs[0] if orig_imgs else None, noindex=not p["index"])
 
 
@@ -993,7 +1015,7 @@ def home_page(S, products, by_room, by_cat, sale):
            "potentialAction": {"@type": "SearchAction", "target": BASE + "/hledat/?q={q}", "query-input": "required name=q"}},
           {"@context": "https://schema.org", "@type": "Organization", "name": "Vteřinka", "url": BASE + "/", "logo": BASE + "/favicon-512.png"}]
     return S.layout("/", "Hodinky a šperky – srovnání cen z českých e‑shopů | Vteřinka", f"Srovnání cen hodinek a šperků z {st['shops']} českých e‑shopů: pánské a dámské hodinky Prim, Casio, Seiko, Citizen, Tissot, prsteny, náušnice a náramky.",
-                    body, jsonld=ld, preload_img="/img/ui/hero-1200.webp", full=True)
+                    body, jsonld=ld, preload_img=("/img/ui/hero-1200.webp", "/img/ui/hero-640.webp 640w, /img/ui/hero-1200.webp 1200w", "(max-width:980px) 92vw, 620px"), full=True)
 
 
 def redirects_file(seen, superseded=None):

@@ -48,7 +48,7 @@ jobs:
       - name: Pages check with real headers (CSP violations, horizontal scroll)
         continue-on-error: true
         run: |
-          npm i --no-save --silent puppeteer-core@23.11.1 >/dev/null
+          npm i --no-save --silent --ignore-scripts puppeteer-core@23.11.1 >/dev/null
           (node scripts/serve.mjs 8765 >/dev/null 2>&1 &)
           sleep 2
           CHROME_PATH=$(command -v google-chrome || command -v chromium) node scripts/check_pages.mjs http://localhost:8765 /tmp/audit/shots | tee /tmp/audit/pages-check.txt
@@ -59,7 +59,7 @@ jobs:
           (node scripts/serve.mjs 8765 >/dev/null 2>&1 &)
           sleep 2
           PROD=$(grep -o '<loc>[^<]*' dist/sitemap-products-1.xml | sed 's/<loc>https:\/\/vterinka.cz//' | sed -n '1p;40p')
-          for u in / /rohove-sedacky/ /postele/ /obyvaci-pokoj/ $PROD; do
+          for u in / /damske-hodinky/ /panske-hodinky/automaticke/ /nausnice/ $PROD; do
             n=$(echo "$u" | tr -c 'a-z0-9' '_' | cut -c1-40)
             for mode in mobile desktop; do
               extra=""; [ "$mode" = desktop ] && extra="--preset=desktop"

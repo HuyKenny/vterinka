@@ -4,12 +4,16 @@
    Bodoni Moda (headings, the type of watch dials and jewellers' signs) + Hanken Grotesk (text), subset to Czech, self-hosted. */
 @font-face{font-family:"Bodoni Moda";src:url(/fonts/bodoni-cs.woff2) format("woff2");font-weight:500 700;font-display:swap}
 @font-face{font-family:"Hanken Grotesk";src:url(/fonts/hanken-cs.woff2) format("woff2");font-weight:400 700;font-display:swap}
+/* metric-matched local fallbacks (computed from the subset fonts vs Liberation/Arial/Times, 19. 11. 2026): the swap to the web font
+   does not move the text, so no layout shift on slow phones */
+@font-face{font-family:"Hanken Fallback";src:local("Arial"),local("Liberation Sans"),local("Helvetica"),local("Roboto");size-adjust:100%;ascent-override:100%;descent-override:30.3%;line-gap-override:0%}
+@font-face{font-family:"Bodoni Fallback";src:local("Times New Roman"),local("Liberation Serif"),local("Times"),local("Noto Serif");size-adjust:114.7%;ascent-override:98%;descent-override:34.9%;line-gap-override:0%}
 :root{
   --paper:#F4EFE4;--card:#FFFDF8;--ink:#16181D;--ink2:#41444C;--muted:#5C5F66;--rule:#16181D;--line:#DCD3C2;
   --fir:#1F3A5F;--fir-d:#152A46;--fir-l:#E2E8F0;--sage:#E4E8EE;--sand:#ECE3D0;--sand-d:#DFD2B8;
   --clay:#962B2B;--clay-d:#741E1E;--clay-l:#F4E0DD;--sun:#C69A3C;--brass:#A87F2A;
   --r:10px;--r-s:7px;--sh:3px 3px 0 var(--ink);--sh-s:2px 2px 0 var(--ink);
-  --ff-h:"Bodoni Moda",Didot,"Bodoni 72",Georgia,serif;--ff:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --ff-h:"Bodoni Moda","Bodoni Fallback",Didot,"Bodoni 72",Georgia,serif;--ff:"Hanken Grotesk","Hanken Fallback",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   color-scheme:light}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
@@ -510,3 +514,5 @@ footer .logo img{width:104px}
 @media (max-width:640px){.logo img{width:112px}}
 .ptag b,.ptag--xl b,.tprice,.hero__stats dt{font-family:var(--ff);font-variant-numeric:lining-nums tabular-nums}
 .ptag--xl b{font-weight:700;font-size:1.6rem}
+/* below the fold: the browser skips rendering until it scrolls near (faster first paint on phones) */
+footer,.faq{content-visibility:auto;contain-intrinsic-size:auto 600px}

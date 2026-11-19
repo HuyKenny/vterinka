@@ -26,6 +26,9 @@
   function fixImg(im) {
     if (im.tagName !== "IMG" || !im.src || im.src.indexOf(location.host) >= 0) return;
     var t = im._t = im._t || {}, cur = im.currentSrc || im.src, orig = unproxy(cur);
+    var had = im.getAttribute("srcset"), base = im.getAttribute("src");
+    im.removeAttribute("srcset");      /* the fallbacks below set src only: a srcset would win over it */
+    if (had && base && cur !== base) { im.src = base; return; }      /* a missing width rendition: the default size first */
     t[(cur.indexOf("wsrv.nl") >= 0 ? "p:" : "d:") + orig] = 1;       /* most pictures arrive resized through wsrv: the original is the fallback */
     if (!t["d:" + orig]) { t["d:" + orig] = 1; im.src = orig; return; }
     if (!t["p:" + orig]) { t["p:" + orig] = 1; im.src = viaProxy(orig); return; }
@@ -106,6 +109,16 @@
   var SW = { bila: "#FFFFFF", cerna: "#1E1E1E", seda: "#9A9C9A", bezova: "#E3D3B8", hneda: "#7A5236", zelena: "#4F7A5A", modra: "#3F6E9E", ruzova: "#E7B3B8", cervena: "#B3322C", zluta: "#E9C24A", oranzova: "#D8743C", zlata: "#C7A043", stribrna: "#C9CCCF" };
   /* row: [0 name, 1 slug, 2 img, 3 price, 4 shops, 5 brand#, 6 colors, 7 mats, 8 styles, 9 wmin, 10 wmax, 11 discount, 12 shopids, 13 variants, 14 tape, 15 feats,
            16 go (cheapest offer), 17 its shop, 18 height, 19 depth, 20 sizes, 21 shapes, 22 seats, 23 category facets ["key:value"]] */
+  /* same renditions as render.img_srcset (card size): phones load the smallest picture that fills the slot */
+  var SS = [[/a\.allegroimg\.com\//, /\/s\d+\//, [[240, "/s240/"], [360, "/s360/"], [512, "/s512/"]]],
+            [/img2\.ans-media\.com\/i\//, /\/i\/\d+x\d+\//, [[300, "/i/300x450/"], [400, "/i/400x600/"]]],
+            [/wsrv\.nl\//, /&w=\d+/, [[240, "&w=240"], [360, "&w=360"], [480, "&w=480"]]]];
+  function srcset(u) {
+    for (var i = 0; u && i < SS.length; i++) if (SS[i][0].test(u) && SS[i][1].test(u)) {
+      return ' srcset="' + esc(SS[i][2].map(function (x) { return u.replace(SS[i][1], x[1]) + " " + x[0] + "w"; }).join(", ")) + '" sizes="(max-width:640px) 46vw, 260px"';
+    }
+    return "";
+  }
   function card(it, brands, shops) {
     var sale = it[11] >= 10 ? '<span class="flag">−' + it[11] + " %</span>" : "";
     var tape = it[14] ? '<span class="tape">' + esc(it[14]) + "</span>" : "";
@@ -118,7 +131,7 @@
     var ga = it[16] ? ' rel="sponsored nofollow noopener" target="_blank" data-go="' + esc(it[17]) + '"' : "";
     var sname = it[17] && shops && shops[it[17]] ? shops[it[17]] : "";
     var where = sname ? (it[4] > 1 ? "nejlevněji " : "") + esc(sname) : "";
-    return '<li class="pc"><a class="pc__img" href="' + go + '"' + ga + ' tabindex="-1" aria-hidden="true"><img src="' + esc(it[2] || "/img/ui/placeholder.svg") + '" alt="" loading="lazy" referrerpolicy="no-referrer" width="400" height="300">' + sale + tape + "</a>" +
+    return '<li class="pc"><a class="pc__img" href="' + go + '"' + ga + ' tabindex="-1" aria-hidden="true"><img src="' + esc(it[2] || "/img/ui/placeholder.svg") + '"' + srcset(it[2]) + ' alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" width="400" height="400">' + sale + tape + "</a>" +
       '<div class="pc__b">' + brand + '<h3><a href="' + go + '"' + ga + ">" + esc(it[0]) + "</a></h3>" + sw + '<div class="pc__f"><span class="ptag">' + ((it[4] > 1 || nv > 1) ? "<small>od</small>" : "") + "<b>" + kc(it[3]) + "</b></span>" +
       '<span class="pc__n">' + meta + "</span></div>" +
       '<div class="pc__a"><span class="pc__w">' + where + '</span><a class="pc__d" href="' + detail + '">Detail</a></div></div></li>';
@@ -261,7 +274,7 @@
   /* ---------- product page ---------- */
   var gm = $("#gmain");
   $$(".thumbs button").forEach(function (b) {
-    b.addEventListener("click", function () { gm.src = b.dataset.src; $$(".thumbs button").forEach(function (x) { x.classList.toggle("on", x === b); }); });
+    b.addEventListener("click", function () { gm.removeAttribute("srcset"); gm.src = b.dataset.src; $$(".thumbs button").forEach(function (x) { x.classList.toggle("on", x === b); }); });
   });
   $$("[data-more]").forEach(function (b) {
     var el = document.getElementById(b.dataset.more);

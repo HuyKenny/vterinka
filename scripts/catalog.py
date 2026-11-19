@@ -381,6 +381,7 @@ def cluster(offers, shop_rank):
         uniq = lambda key: [k for k, _ in Counter(x for o in allo for x in o[key]).most_common()]
         products.append({
             "id": pid, "name": name, "brand": brands.most_common(1)[0][0] if brands else "", "ean": eans[0] if eans else "",
+            "mpn": next((m for m, _ in Counter(o.get("mpn", "") for o in allo if o.get("mpn")).most_common(1)), ""),
             "cat": pick_cat(cats, desc), "desc": desc, "img": img, "imgs": imgs[:7],
             "dry": " ".join({o["name"] for o in allo}).lower()[:600],
             "paths": " ".join(sorted({o["path"] for o in allo if o["path"]}))[:500],

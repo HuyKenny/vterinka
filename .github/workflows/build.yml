@@ -93,7 +93,7 @@ jobs:
         if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.quick) }}
         continue-on-error: true
         run: |
-          npm i --no-save --silent puppeteer-core@23.11.1 >/dev/null
+          npm i --no-save --silent --ignore-scripts puppeteer-core@23.11.1 >/dev/null
           (node scripts/serve.mjs 8765 >/dev/null 2>&1 &)
           sleep 2
           CHROME_PATH=$(command -v google-chrome || command -v chromium) node scripts/check_pages.mjs http://localhost:8765 /tmp/shots

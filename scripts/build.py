@@ -195,15 +195,15 @@ def paged(out, S, path, items, render, group="listings", index=True, per=None):
 
 def price_stats(items):
     """(entry price, median, highest). The entry price skips a lone outlier: "od 52 Kč" over 1 356 gold earrings is a spare part, not an offer a visitor expects
-    (a result that promises a price it does not deliver loses the click and the trust); below 3 % of the list and under half of the 3rd percentile it is ignored."""
+    (a result that promises a price it does not deliver loses the click and the trust); a minimum under 30 % of the 1st percentile is ignored."""
     ps = sorted(p["price"] for p in items)
     if not ps:
         return 0, 0, 0
     lo = ps[0]
     if len(ps) >= 30:
-        p3 = ps[int(len(ps) * 0.03)]
-        if lo < 0.5 * p3:
-            lo = p3
+        p1 = ps[int(len(ps) * 0.01)]
+        if lo < 0.3 * p1:          # a few extremes far below the rest of the list (a 52 Kč "gold" earring among 1 356), not a genuine low end
+            lo = p1
     return lo, int(statistics.median(ps)), ps[-1]
 
 

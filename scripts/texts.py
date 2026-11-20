@@ -95,3 +95,11 @@ def _extra(items, h1, ps, med, E):
     if len(bits) >= 2:
         out += "<h3>Z čeho se nabídka skládá</h3><p>Nejčastější provedení: " + ", ".join(bits) + ". Ve filtru vlevo si zúžíte výběr podle libovolné z těchto vlastností.</p>"
     return out
+
+
+def extra_for(items, h1):
+    """The data-driven sections (most compared models, price spread, what the offer is made of) to append to a hand-written text."""
+    if len(items) < 12:
+        return ""
+    ps = sorted(p["price"] for p in items)
+    return _extra(items, h1, ps, int(statistics.median(ps)), R.E)

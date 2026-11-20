@@ -687,7 +687,7 @@ def listing_body(S, path, h1, lead, items, jsn, icon, texts_key=None, extra_ld=N
     band = S.band(h1, intro or lead, icon, extra)
     prose, qa = TX.generated(texts_key, items, h1, S)
     if t and t.get("body"):
-        prose = t["body"]
+        prose = t["body"] + TX.extra_for(items, h1)
     if t and t.get("faq"):
         qa = t["faq"]
     faq_html, faq_ld = S.faq(qa)

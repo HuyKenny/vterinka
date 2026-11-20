@@ -298,6 +298,34 @@
    "lw": 360,
    "lh": 89,
    "logo_src": 22987
+  },
+  {
+   "id": "hodinkycz",
+   "name": "Hodinky.cz",
+   "domain": "hodinky.cz",
+   "network": "affiliateport",
+   "offer": "782",
+   "feed_key": "ap_782",
+   "color": "#C41E3A",
+   "budget": 1500,
+   "logo": "/img/shops/hodinkycz.webp",
+   "lw": 360,
+   "lh": 88,
+   "logo_src": 5729
+  },
+  {
+   "id": "sperkycz",
+   "name": "Šperky.cz",
+   "domain": "sperky.cz",
+   "network": "affiliateport",
+   "offer": "780",
+   "feed_key": "ap_780",
+   "color": "#B08D57",
+   "budget": 1500,
+   "logo": "/img/shops/sperkycz.webp",
+   "lw": 360,
+   "lh": 92,
+   "logo_src": 18204
   }
  ]
 }

@@ -215,6 +215,7 @@ class Site:
         self.pending_ld = None
         self.nav_ok = None
         self.footer_links = []
+        self.footer_links_j = []
         self.has_guides = False
 
     def url(self, path):
@@ -288,7 +289,7 @@ class Site:
 <main id="main">{content}</main>
 <footer><div class="wrap cols"><div class="fabout"><a class="logo" href="/">{LOGO_LIGHT}</a><p>Vteřinka srovnává ceny hodinek a šperků z {n_shops} českých e‑shopů. Nic neprodáváme: nakoupíte přímo v obchodě za stejnou cenu. Když nakoupíte přes náš odkaz, obchod nám může zaplatit provizi. Z ní web žije a pořadí nabídek neovlivňuje.</p></div>
 <div><h3>Hodinky</h3><ul>{self.flinks(FOOT_A)}{"".join(f'<li><a href="{u}">{E(t)}</a></li>' for u, t in self.footer_links)}<li><a href="/kategorie/">Všechny kategorie</a></li></ul></div>
-<div><h3>Šperky</h3><ul>{self.flinks(FOOT_B)}<li><a href="/slevy/">Hodinky a šperky ve slevě</a></li></ul></div>
+<div><h3>Šperky</h3><ul>{self.flinks(FOOT_B)}{"".join(f'<li><a href="{u}">{E(t)}</a></li>' for u, t in self.footer_links_j)}<li><a href="/slevy/">Hodinky a šperky ve slevě</a></li></ul></div>
 <div><h3>Další</h3><ul>{more}<li><a href="/obchody/">Obchody A–Z</a></li></ul></div>
 <div><h3>Vteřinka</h3><ul><li><a href="/jak-srovnavame/">Jak srovnáváme</a></li>{'<li><a href="/poradna/">Poradna</a></li>' if self.has_guides else ""}{'<li><a href="/studie/">Datové studie</a></li>' if getattr(self, "has_studies", False) else ""}<li><a href="/obchody/">Obchody</a></li><li><a href="/znacky/">Značky</a></li><li><a href="/kontakt/">Kontakt</a></li><li><a href="/ochrana-osobnich-udaju/">Ochrana osobních údajů</a></li><li><a href="#" id="consent-open">Nastavení cookies</a></li></ul></div></div>
 <div class="wrap fine"><p>Ceny, parametry a dostupnost přebíráme od obchodů a mohou se změnit; platí údaj v e‑shopu v okamžiku nákupu. Poslední aktualizace {self.stats["updated"]}.</p>

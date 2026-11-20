@@ -329,7 +329,25 @@ def main():
                 S.superseded[f"/{cat}/{old_slug}/"] = f"/{cat}/{new_slug}/"
         if f"/{new_slug}-hodinky/" in S.landings:
             S.superseded[f"/{old_slug}-hodinky/"] = f"/{new_slug}-hodinky/"
-    S.footer_links = [(L["path"], L["h1"]) for L in landings if L["slug"] in ("automaticke-hodinky", "hodinky-s-chronografem", "potapecske-hodinky")]
+    def _fl(cands):
+        out = []
+        for path, label in cands:
+            ok = (path in S.landings) or (path.startswith("/znacky/") and path.split("/")[2] in S.ctx["brands"])
+            if ok:
+                out.append((path, label))
+        return out
+    # sitewide links to the pages people search most (Google Ads CZ 11/2026): brands and hubs for watches, brands and materials for jewellery
+    S.footer_links = _fl([("/g-shock-hodinky/", "G-Shock hodinky"), ("/znacky/casio/", "Hodinky Casio"), ("/znacky/tissot/", "Hodinky Tissot"), ("/znacky/seiko/", "Hodinky Seiko"),
+                          ("/znacky/prim/", "Hodinky Prim"), ("/automaticke-hodinky/", "Automatické hodinky"), ("/hodinky-s-chronografem/", "Hodinky s chronografem"),
+                          ("/potapecske-hodinky/", "Potápěčské hodinky"), ("/svycarske-hodinky/", "Švýcarské hodinky"), ("/zlate-hodinky/", "Zlaté hodinky"), ("/levne-hodinky/", "Levné hodinky")])
+    S.footer_links_j = _fl([("/naramky/pandora/", "Pandora náramky"), ("/privesky/pandora/", "Pandora přívěsky"), ("/znacky/swarovski/", "Šperky Swarovski"), ("/znacky/tous/", "Šperky Tous"),
+                            ("/nausnice/ze-zlata/", "Zlaté náušnice"), ("/nausnice/ze-stribra/", "Stříbrné náušnice"), ("/prsteny/ze-zlata/", "Zlaté prsteny"), ("/retizky/ze-zlata/", "Zlaté řetízky"),
+                            ("/bizuterie/", "Bižuterie"), ("/tenisove-naramky/", "Tenisové náramky")])
+    S.rev_land = defaultdict(list)      # product id -> the specific pages it belongs to (series, brand hubs, facet hubs), smallest first: product pages link to them
+    for L in landings:
+        if (L["group"] == "gap-hodinky" or L["group"].startswith("hub-")) and L["n"] <= 3000:
+            for q in L["items"]:
+                S.rev_land[q["id"]].append((L["n"], L["path"], L["h1"]))
     guides = LD.load_guides()
     S.guides = {f"/poradna/{g['slug']}/": g for g in guides}
     S.has_guides = bool(guides)
@@ -524,9 +542,10 @@ def offer_rows(S, offers, best_price, label=None):
 
 
 def title_core(p, room):
-    """Product <title> without the site name: "<name> – srovnání cen" when it fits, else the name shortened from the middle."""
-    core = f"{p['name']} – srovnání cen" if len(p["offers"]) > 1 else f"{p['name']} – cena a parametry"
-    return core if len(core) <= room else R.shorten_mid(p["name"], room)
+    """Product <title> without the site name: "<name> – od 1 487 Kč" (the price is what a shopper compares in the result list), the name shortened from the middle to fit."""
+    tail = f" – od {R.kc(p['price'])}" if len(p["offers"]) > 1 else f" – {R.kc(p['price'])}"
+    name = p["name"] if len(p["name"]) + len(tail) <= room else R.shorten_mid(p["name"], max(12, room - len(tail)))
+    return name + tail
 
 
 def product_page(S, p):
@@ -537,7 +556,8 @@ def product_page(S, p):
     var = p.get("variants") or []
     best = p["offers"][0]
     bs = S.shop(best["shop"])
-    code = re.sub(r"\D", "", p["ean"])[-4:] or p["slug"][-4:]
+    mpn_code = re.sub(r"[^A-Za-z0-9]", "", p.get("mpn") or "")[-8:]
+    code = mpn_code or re.sub(r"\D", "", p["ean"])[-4:] or re.sub(r"[^a-z0-9]", "", p["slug"])[-6:]      # the model code tells two near-identical titles apart better than a slug tail
     uniq = f" (kód {code})" if p.get("dup") else ""
     title = title_core(p, 68 - len(SUFFIX) - len(uniq)) + uniq + SUFFIX
     sl = X.size_label(p["dims"])
@@ -560,7 +580,12 @@ def product_page(S, p):
         meta.append(f'<a href="/znacky/{X.slugify(p["brand"])}/">{E(p["brand"])}</a>')
     elif p["brand"]:
         meta.append(f"<span>{E(p['brand'])}</span>")
+    bc_path = f"/{p['cat']}/{X.slugify(p['brand'])}/" if p["brand"] else ""
+    if bc_path in S.landings:
+        meta.append(f'<a href="{bc_path}">{E(S.landings[bc_path]["h1"])}</a>')           # "Pánské hodinky Casio": the page this product belongs to under its brand
     meta.append(f'<a href="/{k}/">{E(cat_name(k))}</a>')
+    for _, path_, h1_ in sorted(S.rev_land.get(p["id"], []))[:2]:                         # series and hubs ("G-Shock GA-2100", "Quartz hodinky")
+        meta.append(f'<a href="{path_}">{E(h1_)}</a>')
     for key, names, slugs in (("styles", X.STYLE_NAME, LD.STYLE_SLUG), ("mats", X.MATERIAL_NAME, LD.MAT_SLUG), ("colors", X.COLOR_NAME, LD.COLOR_SLUG)):
         for v in p[key][:2]:
             path = f"/{p['cat']}/{slugs[v]}/"
@@ -694,8 +719,10 @@ def listing_body(S, path, h1, lead, items, jsn, icon, texts_key=None, extra_ld=N
     fc = facets(items, cats, links_label)
     if brand_pages:
         fc["brandpages"] = brand_pages
+    rest = [k for k in sorted(kids, key=lambda k: -k[2])[40:260] if k[0] not in {u for u, _, _ in cats}]
     body = band + f'<div class="wrap">{S.listing(items, jsn, facets=fc)}' + \
-        (f'<div class="prose">{prose}</div><!--/prose-->' if prose else "") + faq_html + "</div>"
+        (f'<div class="prose">{prose}</div><!--/prose-->' if prose else "") + faq_html + \
+        (f'<details class="morelinks"><summary>Další výběry ({len(rest)})</summary>{S.chips([(u, t, n) for u, t, n in rest])}</details>' if rest else "") + "</div>"
     return body, [faq_ld] + (extra_ld or [])
 
 

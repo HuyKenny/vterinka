@@ -143,26 +143,6 @@ def pop_key(p):
     return (-len(p["offers"]), -(1 if p["img"] else 0), -(1 if R.Site.discount(p) >= 10 else 0), -len(p.get("variants") or []), p["price"])
 
 
-CAT_LIST_CAP = {"panske-hodinky": 280}      # Kenny 20. 11.: the main category page lists only its best 280 products; all the others stay in brand, type and phrase pages
-
-
-def top_picks(ps, n):
-    """The n best products of a category for its main listing: products in more shops first (pop_key), spread over brands round-robin
-    so one brand cannot fill the page. `ps` is already sorted by pop_key; the result keeps that order."""
-    if len(ps) <= n:
-        return ps
-    queues = defaultdict(list)
-    for p in ps:
-        queues[p["brand"] or ""].append(p)
-    order = sorted(queues, key=lambda b: pop_key(queues[b][0]))
-    picked = set()
-    while len(picked) < n and any(queues.values()):
-        for b in order:
-            if queues[b] and len(picked) < n:
-                picked.add(queues[b].pop(0)["id"])
-    return [p for p in ps if p["id"] in picked]
-
-
 def facets(items, extra_cats=None, label="Upřesnit"):
     cnt = lambda key: [(k, n) for k, n in Counter(x for p in items for x in p[key]).most_common() if n >= 2]
     bc = Counter(p["brand"] for p in items if p["brand"])
@@ -371,8 +351,6 @@ def main():
         ps = sorted(by_cat.get(k, []), key=pop_key)
         if not ps:
             continue
-        if k in CAT_LIST_CAP:
-            ps = top_picks(ps, CAT_LIST_CAP[k])
         j = write_json(out, S, k, ps)
         paged(out, S, f"/{k}/", ps, lambda: category_page(S, k, ps, j), "listings", index=k in S.cat_ok)
     for k in SC.SUBCATS:
@@ -768,7 +746,7 @@ def category_page(S, k, items, jsn):
         tt = [(f"{k}/{slug}", f"{label}| {name[:1].lower() + name[1:]}", S.landings[f"/{k}/{slug}/"]["n"], icon)
               for slug, label, icon in WATCH_TYPES if f"/{k}/{slug}/" in S.landings]
         types = (f'<p class="tilelab">{E(name)} podle typu</p>' + S.tiles(tt)) if tt else ""
-        bc = Counter(p["brand"] for p in S.ctx["by_cat"][k] if p["brand"])      # counts of the whole category: the chips lead to pages that show all of them
+        bc = Counter(p["brand"] for p in items if p["brand"])
         bt = [(f"/{k}/{X.slugify(b)}/", b, n) for b, n in bc.most_common(14) if f"/{k}/{X.slugify(b)}/" in S.landings]
         types += (f'<p class="tilelab">{E(name)} podle značky</p>' + S.chips(bt, "chips brandchips")) if len(bt) >= 3 else ""
     body, lds = listing_body(S, f"/{k}/", E(h1), lead, items, jsn, X.ICON[k], texts_key=f"cat:{k}", links=[], links_label="Upřesnit",

@@ -750,7 +750,7 @@ def category_page(S, k, items, jsn):
         bt = [(f"/{k}/{X.slugify(b)}/", b, n) for b, n in bc.most_common(14) if f"/{k}/{X.slugify(b)}/" in S.landings]
         types += (f'<p class="tilelab">{E(name)} podle značky</p>' + S.chips(bt, "chips brandchips")) if len(bt) >= 3 else ""
     body, lds = listing_body(S, f"/{k}/", E(h1), lead, items, jsn, X.ICON[k], texts_key=f"cat:{k}", links=[], links_label="Upřesnit",
-                             extra=types + (f'<p class="tilelab">Další hodinky</p>' if types and sibs else "") + S.tiles(sibs))
+                             extra=types + ((f'<p class="tilelab">Další hodinky</p>' + S.chips([(f"/{c}/", nm, n) for c, nm, n in sibs])) if types and sibs else S.tiles(sibs)))
     return S.layout(f"/{k}/", title, desc, body, crumbs=crumbs_for(k), jsonld=lds, full=True)
 
 

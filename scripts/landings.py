@@ -171,7 +171,8 @@ def generated_records(products, by_cat):
                              "_pred": (lambda m: lambda p: m in p["mats"])(m), "facet": ("mats", m)})
         for s_, n in cnt("styles").most_common():
             if n >= MIN_DEFAULT:
-                recs.append({**base, "slug": f"{cat}/{STYLE_SLUG[s_]}", "h1": phrase(STYLE_ADJ[s_], cat, noun),
+                klas = watch and s_ == "elegantni"       # watches: people say "klasické hodinky" (110/month) as much as "elegantní" (140); the style rule catches both words
+                recs.append({**base, "slug": f"{cat}/{'klasicke' if klas else STYLE_SLUG[s_]}", "h1": phrase("klasick" if klas else STYLE_ADJ[s_], cat, noun),
                              "group": f"{cat}-style", "_pred": (lambda s_: lambda p: s_ in p["styles"])(s_), "facet": ("styles", s_)})
         for f_, n in cnt("feats").most_common():
             if n < MIN_DEFAULT or (f_ in X.EARRING_FEATS and cat != "nausnice"):
@@ -242,7 +243,7 @@ def generated_records(products, by_cat):
             ("vojenske-hodinky", "Vojenské hodinky", watches, "feats", "vojenske"), ("titanove-hodinky", "Titanové hodinky", watches, "mats", "titan"),
             ("keramicke-hodinky", "Keramické hodinky", watches, "mats", "keramika"), ("drevene-hodinky", "Dřevěné hodinky", watches, "mats", "drevo"),
             ("zlate-hodinky", "Zlaté hodinky", watches, "colors", "zlata"), ("luxusni-hodinky", "Luxusní hodinky", watches, "styles", "luxusni"),
-            ("sportovni-hodinky", "Sportovní hodinky", watches, "styles", "sportovni"), ("elegantni-hodinky", "Elegantní hodinky", watches, "styles", "elegantni"),
+            ("sportovni-hodinky", "Sportovní hodinky", watches, "styles", "sportovni"), ("klasicke-hodinky", "Klasické hodinky", watches, "styles", "elegantni"),
             ("retro-hodinky", "Retro hodinky", watches, "styles", "retro"),
             ("stribrne-sperky", "Stříbrné šperky", jewels, "mats", "stribro"), ("zlate-sperky", "Zlaté šperky", jewels, "mats", "zlato"),
             ("sperky-z-chirurgicke-oceli", "Šperky z chirurgické oceli", jewels, "mats", "chirurgicka-ocel"), ("ocelove-sperky", "Ocelové šperky", jewels, "mats", "ocel"),

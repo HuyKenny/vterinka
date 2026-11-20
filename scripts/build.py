@@ -310,6 +310,13 @@ def main():
     landings, ldropped = LD.plan(products, reserved)
     S.landings = {L["path"]: L for L in landings}
     S.kids = LD.kids_map(landings)
+    S.hub_ok = {path.strip("/") for path in S.landings if path.strip("/") in R.NAV_HUBS}       # watch-type pages that exist (menu items)
+    for old_slug, new_slug in (("elegantni", "klasicke"),):         # 11/2026: watches say "klasické" (Kenny); the first URLs go to the new ones
+        for cat in X.WATCH_CATS:
+            if f"/{cat}/{new_slug}/" in S.landings:
+                S.superseded[f"/{cat}/{old_slug}/"] = f"/{cat}/{new_slug}/"
+        if f"/{new_slug}-hodinky/" in S.landings:
+            S.superseded[f"/{old_slug}-hodinky/"] = f"/{new_slug}-hodinky/"
     S.footer_links = [(L["path"], L["h1"]) for L in landings if L["slug"] in ("automaticke-hodinky", "hodinky-s-chronografem", "potapecske-hodinky")]
     guides = LD.load_guides()
     S.guides = {f"/poradna/{g['slug']}/": g for g in guides}
@@ -716,6 +723,9 @@ def fresh():
     return f"Ceny jsme naposledy ověřili {TODAY.day}. {TODAY.month}."
 
 
+WATCH_TYPES = [("digitalni", "Digitální", "digitalni-hodinky"), ("sportovni", "Sportovní", "sportovni-hodinky"), ("klasicke", "Klasické", "klasicke-hodinky")]
+
+
 def category_page(S, k, items, jsn):
     parent = SC.SUB_PARENT.get(k)
     name, room, h1 = (SC.SUBCATS[k][0], X.CATS[parent][1], SC.SUBCATS[k][2]) if parent else (X.CATS[k][0], X.CATS[k][1], X.CATS[k][2])
@@ -731,8 +741,13 @@ def category_page(S, k, items, jsn):
     else:
         sibs = [(c, cat_name(c), len(S.ctx["by_cat"][c])) for c in X.CATS if X.CATS[c][1] == room and c != k and c in S.cat_ok]
     lead = f"{n} {R.plural(n, 'kus', 'kusy', 'kusů')} skladem, ceny od {R.kc(lo)} do {R.kc(hi)}. Polovina stojí méně než {R.kc(med)}. {fresh()}"
+    types = ""
+    if k in X.WATCH_CATS:      # watches by type first (digital / classic / sport: what people pick after "who wears it"), then the other wearers
+        tt = [(f"{k}/{slug}", f"{label} {name[:1].lower() + name[1:]}", S.landings[f"/{k}/{slug}/"]["n"], icon)
+              for slug, label, icon in WATCH_TYPES if f"/{k}/{slug}/" in S.landings]
+        types = (f'<p class="tilelab">{E(name)} podle typu</p>' + S.tiles(tt)) if tt else ""
     body, lds = listing_body(S, f"/{k}/", E(h1), lead, items, jsn, X.ICON[k], texts_key=f"cat:{k}", links=[], links_label="Upřesnit",
-                             extra=S.tiles(sibs))
+                             extra=types + (f'<p class="tilelab">Další hodinky</p>' if types and sibs else "") + S.tiles(sibs))
     return S.layout(f"/{k}/", title, desc, body, crumbs=crumbs_for(k), jsonld=lds, full=True)
 
 

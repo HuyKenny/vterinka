@@ -31,8 +31,13 @@ LOGO_LIGHT = '<img src="/img/ui/logo-light.svg" alt="vteřinka" width="150" heig
 FOOT_A = ["panske-hodinky", "damske-hodinky", "detske-hodinky", "unisex-hodinky", "kapesni-hodinky"]
 FOOT_B = ["prsteny", "nausnice", "nahrdelniky", "naramky", "snubni-prsteny"]
 # header strip: categories, not departments (a watch shopper thinks "pánské hodinky", not "Hodinky")
-NAV = ["panske-hodinky", "damske-hodinky", "detske-hodinky", "prsteny", "nausnice", "nahrdelniky", "naramky", "privesky", "snubni-prsteny", "reminky", "sperkovnice"]
-FOOT_DEPTS = ["retizky", "koralky-na-naramky", "piercing", "broze", "sperkove-soupravy", "manzetove-knoflicky", "boxy-na-hodinky"]
+# header/home icon menu: watches first (by who wears them, then by type), jewellery after (search volume CZ 11/2026: snubní prsteny 5 500, náušnice 5 400, náhrdelník 3 600, prsteny 2 800, náramek 2 200)
+NAV = ["panske-hodinky", "damske-hodinky", "detske-hodinky", "digitalni-hodinky", "klasicke-hodinky", "sportovni-hodinky",
+       "prsteny", "nausnice", "nahrdelniky", "naramky", "snubni-prsteny"]
+# watch types are cross-gender hub pages (landings), not categories: slug -> (menu name, icon file)
+NAV_HUBS = {"digitalni-hodinky": ("Digitální hodinky", "digitalni-hodinky"), "klasicke-hodinky": ("Klasické hodinky", "klasicke-hodinky"),
+            "sportovni-hodinky": ("Sportovní hodinky", "sportovni-hodinky")}
+FOOT_DEPTS = ["privesky", "reminky", "sperkovnice", "retizky", "koralky-na-naramky", "piercing", "broze", "sperkove-soupravy", "manzetove-knoflicky", "boxy-na-hodinky"]
 
 
 def kc(n):
@@ -264,8 +269,9 @@ class Site:
             content = content.replace("<!--crumbs-->", cr, 1)
         ok = self.nav_ok
         cok = getattr(self, "cat_ok", None)
-        nav = "".join(f'<li><a href="/{k}/"><img src="/img/ic/72/{X.ICON[k]}.webp" alt="" width="36" height="36" loading="lazy">{E(X.CATS[k][0])}</a></li>'
-                      for k in NAV if cok is None or k in cok) + '<li><a href="/kategorie/"><img src="/img/ic/72/sperky.webp" alt="" width="36" height="36" loading="lazy">Vše</a></li>'
+        hubs_ok = getattr(self, "hub_ok", None)
+        nav = "".join(f'<li><a href="/{k}/"><img src="/img/ic/72/{NAV_HUBS[k][1] if k in NAV_HUBS else X.ICON[k]}.webp" alt="" width="36" height="36" loading="lazy">{E(NAV_HUBS[k][0] if k in NAV_HUBS else X.CATS[k][0])}</a></li>'
+                      for k in NAV if (k in NAV_HUBS and (hubs_ok is None or k in hubs_ok)) or (k not in NAV_HUBS and (cok is None or k in cok))) + '<li><a href="/kategorie/"><img src="/img/ic/72/sperky.webp" alt="" width="36" height="36" loading="lazy">Vše</a></li>'
         more = "".join(f'<li><a href="/{k}/">{E(X.CATS[k][0])}</a></li>' for k in FOOT_DEPTS if cok is None or k in cok)
         og = og_img or f"{self.base}/img/ui/og.png"
         n_shops = self.stats["shops"]
@@ -374,8 +380,8 @@ class Site:
         if not cats:
             return ""
         return f'<ul class="{cls}">' + "".join(
-            f'<li><a href="/{k}/"><img src="/img/ic/{X.ICON[k]}.webp" alt="" width="{size}" height="{size}" loading="lazy"><span>{E(name)}</span><small>{n} {plural(n, "kus", "kusy", "kusů")}</small></a></li>'
-            for k, name, n in cats) + "</ul>"
+            f'<li><a href="/{k}/"><img src="/img/ic/{icon or X.ICON[k]}.webp" alt="" width="{size}" height="{size}" loading="lazy"><span>{E(name)}</span><small>{n} {plural(n, "kus", "kusy", "kusů")}</small></a></li>'
+            for k, name, n, *ic in cats for icon in [ic[0] if ic else None]) + "</ul>"
 
     def chips(self, links, cls="chips"):
         return f'<ul class="{cls}">' + "".join(f'<li><a href="{u}">{E(t)}{f"<small>{n}</small>" if n else ""}</a></li>' for u, t, n in links) + "</ul>" if links else ""

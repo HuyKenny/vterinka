@@ -71,7 +71,7 @@ JEWEL_CATS = {k for k, v in CATS.items() if v[1] == "sperky"}
 
 # cheaper than this = a strap, a battery or a toy in the wrong place
 PRICE_FLOOR = {"panske-hodinky": 250, "damske-hodinky": 200, "unisex-hodinky": 200, "detske-hodinky": 120, "kapesni-hodinky": 150,
-               "snubni-prsteny": 300, "zasnubni-prsteny": 400, "boxy-na-hodinky": 150}
+               "snubni-prsteny": 300, "zasnubni-prsteny": 400, "boxy-na-hodinky": 150, "reminky": 59}
 
 # ------------------------------------------------------------------ veto
 # anywhere in the title: not a classic watch / not jewellery, whatever comes first

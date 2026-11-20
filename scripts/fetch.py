@@ -244,6 +244,16 @@ def xml_items(resp):
             k = local(ch.tag)
             if k == "PARAM":
                 params.append(((ch.findtext("PARAM_NAME") or "").strip().lower(), (ch.findtext("VAL") or "").strip()))
+            elif k == "product_detail":           # Google feed: <g:product_detail> name/value pairs; Hodinky.cz and Sperky.cz put a JSON of all parameters under "parametry"
+                nv = {local(x.tag): (x.text or "").strip() for x in ch}
+                if nv.get("attribute_name") == "parametry":
+                    try:
+                        for pv in json.loads(nv.get("attribute_value") or "{}").values():
+                            params.append(((pv.get("param_name") or "").strip().lower(), str(pv.get("val") or "").strip()))
+                    except (ValueError, AttributeError):
+                        pass
+                elif nv.get("attribute_name"):
+                    params.append((nv["attribute_name"].strip().lower(), nv.get("attribute_value", "")))
             elif k in ("IMGURL_ALTERNATIVE", "additional_image_link"):
                 imgs.append((ch.text or "").strip())
             else:
@@ -293,7 +303,15 @@ def xml_offers(shop, resp, link_of):
         yield {"id": pid, "g": d.get("ITEMGROUP_ID") or d.get("item_group_id") or "", "t": title,
                "d": re.sub(r"<[^>]+>", " ", html.unescape(desc or ""))[:1500], "b": brand or "", "ean": ean or "", "mpn": mpn,
                "img": img or "", "imgs": [i for i in imgs if i][:5], "p": price, "was": was, "url": plain, "go": go,
-               "cat": html.unescape(cat or ""), "col": pmap.get("barva") or d.get("color") or ""}
+               "cat": html.unescape(cat or ""), "col": pmap.get("barva") or d.get("color") or "",
+               "prm": {k: v[:90] for k, v in params if k in PRM_KEYS and v}}
+
+
+# shop parameters kept for facets (watches and jewellery): what the competitors filter by and we only guessed from titles
+PRM_KEYS = {"materiál pouzdra", "materiál řemínku", "tvar pouzdra", "barva ciferníku", "barva řemínku/tahu", "barva řemínku", "typ strojku", "funkce hodinek",
+            "funkce hodinek add", "ukazatel data", "původ", "šířka řemínku", "tloušťka", "hmotnost", "luminiscence", "alarm", "sklo", "vodotěsnost", "typ", "styl",
+            "rezerva chodu", "velikost hodinek", "design & motiv", "osazení", "materiál", "zapínání", "barva", "povrchová úprava", "určení", "pro koho",
+            "povrchová úprava pouzdro", "luneta", "zkušenost"}
 
 
 def open_url(url):

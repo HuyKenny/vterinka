@@ -163,6 +163,11 @@ def facets(items, extra_cats=None, label="Upřesnit"):
         if len(c) > 1 and enough(sum(1 for p in items if (p.get("fx") or {}).get(key))):
             fx[key] = [(v, n) for v, n in c.most_common() if n >= 2]
     f["fx"] = fx
+    if items and sum(1 for p in items if p["cat"] in X.WATCH_CATS) >= len(items) / 2:     # watches: the parameter filters replace the generic ones that say the same
+        if "mov" in fx:
+            f["feats"] = [(k, n) for k, n in f["feats"] if k not in ("automaticke", "mechanicke", "solarni", "rizene-radiem")]
+        if "casemat" in fx or "strap" in fx:
+            f["mats"] = []
     if extra_cats:
         f["cats"], f["cats_label"] = extra_cats, label
     return f
@@ -240,7 +245,7 @@ def main():
         p["nkey"] = X.slugify(p["name"])
         p["shape"] = X.shapes_of(p["name"] + " " + p.get("dry", ""), p["cat"])
         p["seats"] = X.seats_of(p["name"] + " " + p.get("dry", ""), p["cat"])
-        p["fx"] = X.facet_values(p["name"] + " " + p.get("dry", "") + " " + p["desc"][:700], p["cat"])
+        p["fx"] = X.facet_values(p["name"] + " " + p.get("dry", "") + " " + p["desc"][:700], p["cat"], p.get("prm"))
         p["page"] = not MAX_PRODUCTS or i < MAX_PRODUCTS
         p["index"] = len(p["offers"]) > 1 or len(p["desc"]) >= 120 or bool(p["variants"])
     name_count = Counter(p["nkey"] for p in products)
@@ -750,7 +755,7 @@ def category_page(S, k, items, jsn):
               for slug, label, icon in WATCH_TYPES if f"/{k}/{slug}/" in S.landings]
         types = (f'<p class="tilelab">{E(name)} podle typu</p>' + S.tiles(tt)) if tt else ""
     bp = {b: f"/{k}/{X.slugify(b)}/" for b in {p["brand"] for p in S.ctx["by_cat"][k] if p["brand"]}
-          if f"/{k}/{X.slugify(b)}/" in S.landings} if k in LD.BRAND_GENDER_CATS else {}      # filter "Značka" -> its own page (Kenny 20. 11.)
+          if f"/{k}/{X.slugify(b)}/" in S.landings} if k in LD.BRAND_PAGE_CATS else {}      # filter "Značka" -> its own page (Kenny 20. 11.)
     body, lds = listing_body(S, f"/{k}/", E(h1), lead, items, jsn, X.ICON[k], texts_key=f"cat:{k}", links=[], links_label="Upřesnit", brand_pages=bp,
                              extra=types + ((f'<p class="tilelab">Další hodinky</p>' + S.chips([(f"/{c}/", nm, n) for c, nm, n in sibs])) if types and sibs else S.tiles(sibs)))
     return S.layout(f"/{k}/", title, desc, body, crumbs=crumbs_for(k), jsonld=lds, full=True)

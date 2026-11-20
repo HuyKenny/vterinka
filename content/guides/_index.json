@@ -147,5 +147,42 @@
     "detske-hodinky"
    ]
   }
+ },
+ {
+  "slug": "velikost-prstenu-jak-zmerit",
+  "h1": "Velikost prstenu: jak změřit a převodní tabulka",
+  "title": "Velikost prstenu: jak změřit a tabulka velikostí",
+  "date": "2026-11-20",
+  "related": [
+   "/prsteny/",
+   "/snubni-prsteny/",
+   "/zasnubni-prsteny/"
+  ],
+  "rules": {
+   "cat": [
+    "prsteny",
+    "snubni-prsteny",
+    "zasnubni-prsteny"
+   ]
+  }
+ },
+ {
+  "slug": "zlato-585-750-stribro-925",
+  "h1": "Zlato 585, 750 a stříbro 925: co znamenají čísla na šperku",
+  "title": "Zlato 585 a 750, stříbro 925: ryzost šperků",
+  "date": "2026-11-20",
+  "related": [
+   "/prsteny/",
+   "/retizky/",
+   "/nausnice/"
+  ],
+  "rules": {
+   "cat": [
+    "prsteny",
+    "retizky",
+    "nausnice",
+    "naramky"
+   ]
+  }
  }
 ]

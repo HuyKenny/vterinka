@@ -452,5 +452,908 @@
    ]
   },
   "parent": "/reminky/"
+ },
+ {
+  "slug": "casio-ga-2100",
+  "h1": "Casio G-Shock GA-2100 (CasiOak)",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "\\bga.?2100",
+    "casioak"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/g-shock-hodinky/"
+  ],
+  "min": 4,
+  "index_min": 8
+ },
+ {
+  "slug": "casio-dw-5600",
+  "h1": "Casio G-Shock DW-5600",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "\\bdw.?5600",
+    "\\bdw.?5610"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/g-shock-hodinky/"
+  ],
+  "min": 4,
+  "index_min": 8
+ },
+ {
+  "slug": "casio-gw-m5610",
+  "h1": "Casio G-Shock GW-M5610 solární",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "\\bgw.?m5610",
+    "\\bgw.?5000"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/g-shock-hodinky/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "g-shock-g-squad",
+  "h1": "G-Shock G-Squad",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "g.?squad",
+    "\\bgbd.?\\d"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/g-shock-hodinky/"
+  ],
+  "min": 4,
+  "index_min": 8
+ },
+ {
+  "slug": "g-shock-mudmaster",
+  "h1": "G-Shock MudMaster",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "mudmaster",
+    "\\bgg.?b100",
+    "\\bgwg.?b1000"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/g-shock-hodinky/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "g-shock-mr-g",
+  "h1": "G-Shock Mr-G",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "\\bmr.?g\\b",
+    "\\bmrg.?"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/g-shock-hodinky/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "g-shock-frogman-rangeman",
+  "h1": "G-Shock Frogman a Rangeman",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "frogman",
+    "rangeman",
+    "\\bgw.?9400",
+    "\\bgwf.?"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/g-shock-hodinky/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "casio-collection-hodinky",
+  "h1": "Casio Collection hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "brand": [
+    "Casio"
+   ],
+   "any": [
+    "\\bcollection\\b",
+    "\\bmtp.?\\d",
+    "\\bltp.?\\d"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/casio/"
+  ]
+ },
+ {
+  "slug": "casio-f-91w",
+  "h1": "Casio F-91W a A168",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "\\bf.?91w",
+    "\\ba.?168",
+    "\\ba.?158",
+    "\\ba.?700"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/casio-vintage-hodinky/"
+  ],
+  "min": 4,
+  "index_min": 8
+ },
+ {
+  "slug": "casio-pro-trek",
+  "h1": "Casio Pro Trek",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "pro.?trek",
+    "\\bprg.?\\d",
+    "\\bprw.?\\d"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/casio/"
+  ],
+  "min": 4,
+  "index_min": 8
+ },
+ {
+  "slug": "casio-baby-g",
+  "h1": "Casio Baby-G",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "baby.?g\\b",
+    "\\bbga.?\\d",
+    "\\bbgd.?\\d"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/casio/"
+  ]
+ },
+ {
+  "slug": "tissot-prx",
+  "h1": "Tissot PRX",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "\\bprx\\b"
+   ],
+   "brand": [
+    "Tissot"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/tissot/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "tissot-ballade",
+  "h1": "Tissot Ballade",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "ballade"
+   ],
+   "brand": [
+    "Tissot"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/tissot/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "tissot-le-locle-gentleman",
+  "h1": "Tissot Le Locle a Gentleman",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "le locle",
+    "gentleman"
+   ],
+   "brand": [
+    "Tissot"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/tissot/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "tissot-t-touch",
+  "h1": "Tissot T-Touch",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "t.?touch"
+   ],
+   "brand": [
+    "Tissot"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/tissot/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "tissot-seastar-prc-200",
+  "h1": "Tissot Seastar a PRC 200",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "seastar",
+    "prc.?200",
+    "prc.?100",
+    "supersport"
+   ],
+   "brand": [
+    "Tissot"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/tissot/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "seiko-5-sports",
+  "h1": "Seiko 5 Sports",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "seiko 5\\b",
+    "\\bsrpd",
+    "\\bsnk\\d",
+    "\\bsrp[a-z]\\d"
+   ],
+   "brand": [
+    "Seiko"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/seiko/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "seiko-presage-prospex",
+  "h1": "Seiko Presage a Prospex",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "presage",
+    "prospex"
+   ],
+   "brand": [
+    "Seiko"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/seiko/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "citizen-promaster-attesa",
+  "h1": "Citizen Promaster a Attesa",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "promaster",
+    "attesa",
+    "\\bsatellite wave"
+   ],
+   "brand": [
+    "Citizen"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/citizen/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "orient-bambino-mako",
+  "h1": "Orient Bambino, Mako a Kamasu",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "bambino",
+    "\\bmako\\b",
+    "kamasu",
+    "\\bstar\\b"
+   ],
+   "brand": [
+    "Orient"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/orient/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "daniel-wellington-classic-petite",
+  "h1": "Daniel Wellington Classic a Petite",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "classic",
+    "petite",
+    "quadro",
+    "iconic"
+   ],
+   "brand": [
+    "Daniel Wellington"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/daniel-wellington/"
+  ]
+ },
+ {
+  "slug": "timex-weekender-expedition",
+  "h1": "Timex Weekender a Expedition",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "weekender",
+    "expedition",
+    "marlin",
+    "easy reader"
+   ],
+   "brand": [
+    "Timex"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/timex/"
+  ]
+ },
+ {
+  "slug": "swatch-sistem51-moonswatch",
+  "h1": "Swatch Sistem51 a MoonSwatch",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "sistem ?51",
+    "moonswatch",
+    "moon ?swatch",
+    "royal pop"
+   ],
+   "brand": [
+    "Swatch"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/swatch/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "hamilton-khaki",
+  "h1": "Hamilton Khaki Field",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "khaki"
+   ],
+   "brand": [
+    "Hamilton"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/hamilton/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "zlate-hodinky-casio",
+  "h1": "Zlaté hodinky Casio",
+  "group": "gap-hodinky",
+  "rules": {
+   "brand": [
+    "Casio"
+   ],
+   "colors": [
+    "zlata"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/casio/",
+   "/zlate-hodinky/"
+  ]
+ },
+ {
+  "slug": "hodinky-na-behani",
+  "h1": "Sportovní hodinky na běhání a trénink",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "\\brunning\\b",
+    "\\bbezeck\\w*",
+    "\\bbehani\\b",
+    "\\bsport\\w* (hodink|chronograf)",
+    "\\bpro.?trek",
+    "\\bg.?shock"
+   ],
+   "none": [
+    "chytr\\w*",
+    "smart\\w*"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/sportovni-hodinky/"
+  ],
+  "min": 8
+ },
+ {
+  "slug": "hodinky-do-vody",
+  "h1": "Vodotěsné hodinky do vody (10 ATM a víc)",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "\\b(10|20|30|50|100) ?atm",
+    "\\b(100|200|300) ?m\\b",
+    "\\bplavani\\b",
+    "\\bplavec\\w*"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/potapecske-hodinky/"
+  ],
+  "min": 10
+ },
+ {
+  "slug": "outdoorove-hodinky",
+  "h1": "Outdoorové hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "outdoor\\w*",
+    "\\btrek\\w*",
+    "\\bkompas\\w*",
+    "\\bvojensk\\w*",
+    "\\bfield\\b"
+   ],
+   "none": [
+    "chytr\\w*",
+    "smart\\w*"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/sportovni-hodinky/"
+  ],
+  "min": 8
+ },
+ {
+  "slug": "tenisove-naramky",
+  "h1": "Tenisové náramky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "naramky"
+   ],
+   "any": [
+    "tenisov\\w*",
+    "\\btennis\\b"
+   ]
+  },
+  "parent": "/naramky/"
+ },
+ {
+  "slug": "tenisove-nahrdelniky",
+  "h1": "Tenisové náhrdelníky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "nahrdelniky",
+    "retizky"
+   ],
+   "any": [
+    "tenisov\\w*",
+    "\\btennis\\b"
+   ]
+  },
+  "parent": "/nahrdelniky/"
+ },
+ {
+  "slug": "pecetni-prsteny",
+  "h1": "Pečetní prsteny",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "prsteny"
+   ],
+   "any": [
+    "pecetn\\w*",
+    "\\bsignet\\b"
+   ]
+  },
+  "parent": "/prsteny/"
+ },
+ {
+  "slug": "bizuterie",
+  "h1": "Bižuterie",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "sperky"
+   ],
+   "any": [
+    "bizuter\\w*"
+   ],
+   "scope": "text"
+  },
+  "parent": null,
+  "min": 12,
+  "lead": "Bižuterie a módní šperky za pár stovek: náušnice, náhrdelníky, náramky a prsteny. Porovnání cen v českých e-shopech."
+ },
+ {
+  "slug": "bizuterie-nausnice",
+  "h1": "Bižuterie náušnice",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "nausnice"
+   ],
+   "any": [
+    "bizuter\\w*"
+   ],
+   "scope": "text"
+  },
+  "parent": "/nausnice/"
+ },
+ {
+  "slug": "bizuterie-nahrdelniky",
+  "h1": "Bižuterie náhrdelníky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "nahrdelniky"
+   ],
+   "any": [
+    "bizuter\\w*"
+   ],
+   "scope": "text"
+  },
+  "parent": "/nahrdelniky/"
+ },
+ {
+  "slug": "naramky-se-jmenem",
+  "h1": "Náramky se jménem",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "naramky"
+   ],
+   "any": [
+    "\\bjmen\\w*",
+    "\\binicial\\w*",
+    "\\bgravir\\w*",
+    "\\bpismen\\w*"
+   ]
+  },
+  "parent": "/naramky/"
+ },
+ {
+  "slug": "retizky-se-jmenem",
+  "h1": "Řetízky se jménem",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "retizky",
+    "nahrdelniky"
+   ],
+   "any": [
+    "\\bjmen\\w*",
+    "\\binicial\\w*",
+    "\\bgravir\\w*",
+    "\\bpismen\\w*"
+   ]
+  },
+  "parent": "/retizky/"
+ },
+ {
+  "slug": "sperkovnice-krabicky-na-sperky",
+  "h1": "Krabičky na šperky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "sperkovnice"
+   ],
+   "any": [
+    "krabick\\w*",
+    "\\bbox\\b",
+    "\\betui\\b",
+    "\\bkazet\\w*"
+   ]
+  },
+  "parent": "/sperkovnice/"
+ },
+ {
+  "slug": "sperkovnice-stojany-na-sperky",
+  "h1": "Stojany na šperky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "sperkovnice"
+   ],
+   "any": [
+    "stojan\\w*",
+    "stromek",
+    "\\bvesak\\w*",
+    "\\bdrzak\\w*"
+   ]
+  },
+  "parent": "/sperkovnice/"
+ },
+ {
+  "slug": "cestovni-sperkovnice",
+  "h1": "Cestovní šperkovnice",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "sperkovnice"
+   ],
+   "any": [
+    "cestovn\\w*",
+    "\\bmini\\b"
+   ]
+  },
+  "parent": "/sperkovnice/"
+ },
+ {
+  "slug": "velke-sperkovnice",
+  "h1": "Velké šperkovnice",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "sperkovnice"
+   ],
+   "any": [
+    "\\bvelk\\w*",
+    "skrin\\w*",
+    "komod\\w*"
+   ]
+  },
+  "parent": "/sperkovnice/"
+ },
+ {
+  "slug": "piercing-do-nosu",
+  "h1": "Piercing do nosu",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "piercing"
+   ],
+   "any": [
+    "\\bnos\\w*",
+    "\\bnostril",
+    "\\bseptum"
+   ]
+  },
+  "parent": "/piercing/"
+ },
+ {
+  "slug": "piercing-do-pupiku",
+  "h1": "Piercing do pupíku",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "piercing"
+   ],
+   "any": [
+    "\\bpupik\\w*",
+    "\\bpupk\\w*",
+    "\\bbelly",
+    "\\bnavel"
+   ]
+  },
+  "parent": "/piercing/"
+ },
+ {
+  "slug": "piercing-do-ucha",
+  "h1": "Piercing do ucha (helix, tragus)",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "piercing"
+   ],
+   "any": [
+    "\\bhelix",
+    "\\btragus",
+    "\\bconch",
+    "\\bdaith",
+    "\\bucho\\b",
+    "\\buch\\w*"
+   ]
+  },
+  "parent": "/piercing/"
+ },
+ {
+  "slug": "piercing-do-oboci",
+  "h1": "Piercing do obočí",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "piercing"
+   ],
+   "any": [
+    "\\boboc\\w*",
+    "\\beyebrow"
+   ]
+  },
+  "parent": "/piercing/"
+ },
+ {
+  "slug": "piercing-do-rtu",
+  "h1": "Piercing do rtu (labret)",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "piercing"
+   ],
+   "any": [
+    "\\bret\\b",
+    "\\brtu\\b",
+    "\\blabret",
+    "\\blip\\b"
+   ]
+  },
+  "parent": "/piercing/"
  }
 ]

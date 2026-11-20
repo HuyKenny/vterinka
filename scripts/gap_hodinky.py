@@ -15,10 +15,13 @@ from pathlib import Path
 
 fold = lambda s: "".join(c for c in unicodedata.normalize("NFKD", s.lower()) if not unicodedata.combining(c))
 BRAND_NAV = re.compile(r"\b(hodinky ?365|helveti\w*|hodinkovna|koscom|hodinarstvi|heureka|zbozi|alza|datart|allegro|glami|mall|zilka|timestore|modio|irisimo|kosik|tchibo|lidl|"
-                       r"bazos|aukro|sbazar|planeo|hodinky\.cz|hodinkycz|eshop)\b")
+                       r"bazos|aukro|sbazar|planeo|hodinky\.cz|hodinkycz|eshop|olivie|eppi|marre|brunoshop|francobene|pavona|apart|silvego|klenota\w*|izlato\w*|sperky4u|goldstore|goldpoint|goldex|sperky\.cz|sperky ?cz)\b")
+NOISE_J = re.compile(r"\b(gold ?store|goldpoint|goldex|apart|silvego|klenota|izlato\w*|sperky ?4u|ok sperky|sylviene|zastavarna|vykup\w*|cena zlata|kurz|gram\w*|zlaty (cip|slitek|bar)|investic\w*|mince|dukat\w*|bitcoin|tetovani|tattoo|erotick\w*|sex|vagin\w*|penis|opravit|oprava|cisteni|jak vycistit|vycistit|navod|recept|film|pdf|zdarma|praha|brno|ostrava|plzen|olomouc|liberec|opava|jihlava|kolin|obchod\w*|prodejna|bazar|bazos|aukro|vinted|vanoce|black friday|sleva|akce|ucet|akcie)\b")
 NOISE = re.compile(r"\b(chytre|smart\w*|garmin|apple|fitbit|xiaomi|huawei|amazfit|polar|suunto|samsung|galaxy|fitness|naramek na cviceni|nastenne|kuchynske|budik\w*|stolni|"
                    r"hodiny|kukacky|piskove|slunecni|navijec|bazar|pujcovn\w*|oprava|servis\w*|baterie|vymena|navod|nastaveni|jak\b|film|pdf|zdarma|erotic\w*|sex|"
                    r"obchod\w*|prodejna|praha|brno|ostrava|plzen|olomouc|liberec|opava|cena|akce|sleva|black friday|vanoce)\b")
+MODE = sys.argv[3] if len(sys.argv) > 3 else "hodinky"
+JEWEL = re.compile(r"sperk|prsten|nausnic|nahrdeln|naramek|naramky|privesek|privesky|retiz|brz|piercing|retizek|koralek|manzet|snubn|zasnubn|zlat|stribr|diamant|perl|zirkon|swarovsk|pandora|tous|chirurgick|ocel|sada|souprav|kruhy|pecky|visac|medailon|nakotnik")
 WATCH = re.compile(r"hodink|casio|g shock|gshock|seiko|citizen|tissot|prim\b|festina|orient|timex|fossil|swatch|lorus|hamilton|certina|bulova|edifice|baby g|wellington|"
                    r"michael kors|diesel|guess|skagen|emporio|rolex|omega|tag heuer|longines|ruzek|reminek|remínek|tah na hodinky|natahovac")
 BRANDS = ["casio", "g shock", "seiko", "citizen", "tissot", "prim", "festina", "orient", "timex", "fossil", "swatch", "lorus", "hamilton", "certina", "bulova", "edifice",
@@ -35,7 +38,7 @@ rows = defaultdict(lambda: {"doms": {}, "vol": 0, "phrase": "", "urls": set()})
 for dom, ks in data.items():
     for k in ks:
         key = " ".join(re.findall(r"[a-z0-9]+", fold(k["kw"])))
-        if not key or BRAND_NAV.search(key) or NOISE.search(key) or not WATCH.search(key):
+        if not key or BRAND_NAV.search(key) or (NOISE_J if MODE == "sperky" else NOISE).search(key) or not (JEWEL if MODE == "sperky" else WATCH).search(key):
             continue
         r = rows[key]
         r["phrase"] = r["phrase"] or k["kw"]
@@ -52,8 +55,8 @@ for key, r in rows.items():
     unc.append((key, r))
 unc.sort(key=lambda x: (-x[1]["vol"], -len(x[1]["doms"])))
 json.dump([{"kw": r["phrase"], "key": k, "vol": r["vol"], "n": len(r["doms"]), "best": min(r["doms"].values()), "doms": sorted(r["doms"]), "urls": sorted(r["urls"])[:2]} for k, r in unc],
-          open("/home/kenny/ai/reports/vterinka/content-gap-hodinky-2026-11.json", "w"), ensure_ascii=False)
-print(f"# Content gap: hodinky (vterinka.cz, 20. 11. 2026)\n\n{len(rows)} watch phrases from {len(data)} competitors, {cov} already covered by a live page, **{len(unc)} uncovered**.\n")
+          open(f"/home/kenny/ai/reports/vterinka/content-gap-{MODE}-kolo2-2026-11.json", "w"), ensure_ascii=False)
+print(f"# Content gap: {MODE} (vterinka.cz, 20. 11. 2026)\n\n{len(rows)} watch phrases from {len(data)} competitors, {cov} already covered by a live page, **{len(unc)} uncovered**.\n")
 print("| fráze | objem | konkurentů | nejlepší pozice | URL konkurenta |\n|---|---:|---:|---:|---|")
 for key, r in unc[:150]:
     print(f"| {r['phrase']} | {r['vol']} | {len(r['doms'])} | {min(r['doms'].values())} | {sorted(r['urls'])[0]} |")

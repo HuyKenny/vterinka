@@ -19,6 +19,9 @@ APP = Path(__file__).resolve().parent.parent
 MIN_DEFAULT, INDEX_MIN_DEFAULT = 6, 12
 BRAND_GENDER_CATS = {"panske-hodinky", "damske-hodinky", "detske-hodinky"}
 BRAND_GENDER_MIN = 10
+LEGACY_FACET_PAGES = {"glass", "wr", "strap"}
+BRAND_PAGE_CATS = BRAND_GENDER_CATS | X.JEWEL_CATS
+CZ_BRANDS = {"Prim", "Bentime", "JVD", "Elton", "MPM-Quality"}
 fold = X.fold
 
 # plural adjective forms: categories are feminine/masculine-inanimate plural ("pánské hodinky", "zlaté prsteny", "stříbrné náušnice"),
@@ -36,7 +39,7 @@ MAT_ADJ = {"stribro": "stříbrn", "zlato": "zlat", "bile-zlato": "z bílého zl
 STYLE_ADJ = {"sportovni": "sportovní*", "elegantni": "elegantní*", "luxusni": "luxusní*", "retro": "retro*", "minimalisticky": "minimalistick", "boho": "boho*"}
 FEAT_ADJ = {"automaticke": "automatick", "mechanicke": "mechanick", "solarni": "solární*", "rizene-radiem": "řízené rádiem#", "chronograf": "s chronografem#",
             "digitalni": "digitální*", "potapecske": "potápěčsk", "pilotni": "pilotní*", "vojenske": "vojensk", "skeleton": "skeleton#",
-            "s-perlou": "s perlou#", "s-diamantem": "s diamantem#", "se-zirkony": "se zirkony#", "s-krystaly": "s krystaly#", "s-kamenem": "s kamenem#",
+            "s-perlou": "perlov", "s-diamantem": "s diamantem#", "se-zirkony": "se zirkony#", "s-krystaly": "s krystaly#", "s-kamenem": "s kamenem#",
             "srdce": "se srdcem#", "kriz": "s křížkem#", "strom-zivota": "se stromem života#", "nekonecno": "s nekonečnem#", "ctyrlistek": "se čtyřlístkem#",
             "andel": "s andělem#", "pismeno": "s písmenem#", "znameni": "se znamením zvěrokruhu#", "kruhove": "kruhov", "pecky": "pecky#",
             "visaci": "visací*", "klipsy": "klipsy#", "pro-muze": "pánsk", "pro-zeny": "dámsk", "pro-deti": "dětsk"}
@@ -176,11 +179,12 @@ def generated_records(products, by_cat):
                 klas = watch and s_ == "elegantni"       # watches: people say "klasické hodinky" (110/month) as much as "elegantní" (140); the style rule catches both words
                 recs.append({**base, "slug": f"{cat}/{'klasicke' if klas else STYLE_SLUG[s_]}", "h1": phrase("klasick" if klas else STYLE_ADJ[s_], cat, noun),
                              "group": f"{cat}-style", "_pred": (lambda s_: lambda p: s_ in p["styles"])(s_), "facet": ("styles", s_)})
-        if cat in BRAND_GENDER_CATS:      # "pánské hodinky Casio", "dámské hodinky Michael Kors": the biggest uncovered family in the 11/2026 gap (brand x gender, 100-900 searches each)
+        if cat in BRAND_PAGE_CATS:      # "pánské hodinky Casio", "Pandora náramky": the biggest uncovered family in the 11/2026 gap (brand x category, 100-14 800 searches each)
             for b, n in Counter(p["brand"] for p in items if p["brand"]).most_common():
                 bs = X.slugify(b)
                 if n >= BRAND_GENDER_MIN and bs and bs not in X.TREE:
-                    recs.append({**base, "slug": f"{cat}/{bs}", "h1": f"{noun} {b}", "group": f"{cat}-brand", "hubs": [f"/znacky/{bs}/"],
+                    h1 = f"{noun} {b}" if watch else f"{b} {noun[:1].lower() + noun[1:]}"       # watches: gender first (pánské hodinky Casio), jewellery: brand first (Pandora náramky)
+                    recs.append({**base, "slug": f"{cat}/{bs}", "h1": h1, "group": f"{cat}-brand", "hubs": [f"/znacky/{bs}/"],
                                  "_pred": (lambda b: lambda p: p["brand"] == b)(b), "facet": ("brand", b)})
         for f_, n in cnt("feats").most_common():
             if n < MIN_DEFAULT or (f_ in X.EARRING_FEATS and cat != "nausnice"):
@@ -191,7 +195,7 @@ def generated_records(products, by_cat):
             recs.append({**base, "slug": f"{cat}/{FEAT_SLUG.get(f_, f_)}", "h1": h1, "group": f"{cat}-feat",
                          "_pred": (lambda f_: lambda p: f_ in p["feats"])(f_), "facet": ("feats", f_)})
         for key, (lab, cats, vals) in X.FACETS.items():          # watch facets people search: "hodinky safírové sklo", "vodotěsné hodinky 10 ATM"
-            if cat not in cats or key == "display":
+            if cat not in cats or key not in LEGACY_FACET_PAGES:        # new parameter facets (11/2026) are filters; only volume-backed ones get hub pages below
                 continue
             for v, n in Counter(x for p in items for x in (p.get("fx") or {}).get(key, [])).most_common():
                 if n >= MIN_DEFAULT:
@@ -227,7 +231,7 @@ def generated_records(products, by_cat):
     for cat in ("prsteny", "nausnice", "nahrdelniky", "naramky", "privesky", "retizky"):
         items = by_cat.get(cat, [])
         for m in ("stribro", "zlato", "chirurgicka-ocel"):
-            for f_ in ("s-perlou", "s-diamantem", "se-zirkony", "s-kamenem", "srdce", "kriz", "strom-zivota", "pro-muze", "pro-deti", "kruhove", "pecky"):
+            for f_ in ("s-perlou", "s-diamantem", "se-zirkony", "s-kamenem", "srdce", "kriz", "strom-zivota", "pro-muze", "pro-zeny", "pro-deti", "kruhove", "pecky"):
                 n = sum(1 for p in items if f_ in p["feats"] and m in p["mats"])
                 if n >= INDEX_MIN_DEFAULT and not (f_ in X.EARRING_FEATS and cat != "nausnice"):
                     noun = X.CATS[cat][0]
@@ -262,6 +266,15 @@ def generated_records(products, by_cat):
     for slug, h1, pool, key, val in hubs:
         recs.append({"slug": slug, "h1": h1, "group": "hub-" + key, "parent": None, "home": True,
                      "_items": [p for p in pool if val in p[key]], "facet": (key, val)})
+    # hubs from the parameter facets with searches behind them (Google Ads CZ 11/2026: quartz 480, české 210, hranaté 170)
+    fxhub = lambda fkey, fval: [p for p in watches if fval in (p.get("fx") or {}).get(fkey, [])]
+    recs.append({"slug": "quartz-hodinky", "h1": "Quartz hodinky", "group": "hub-fx", "parent": None, "home": True, "_items": fxhub("mov", "quartz"), "facet": ("fx", "mov:quartz"),
+                 "lead": "Quartz hodinky s baterií: přesné, nenáročné na údržbu a dostupné ve všech cenách. Porovnejte stejný model ve více obchodech."})
+    recs.append({"slug": "hranate-hodinky", "h1": "Hranaté hodinky", "group": "hub-fx", "parent": None, "home": True, "_items": fxhub("shape", "hranate") + fxhub("shape", "obdelnikove"),
+                 "facet": ("fx", "shape:hranate")})
+    recs.append({"slug": "ceske-hodinky", "h1": "České hodinky", "group": "hub-fx", "parent": None, "home": True,
+                 "_items": [p for p in watches if "cesko" in (p.get("fx") or {}).get("origin", []) or p["brand"] in CZ_BRANDS], "facet": ("fx", "origin:cesko"),
+                 "lead": "Hodinky českých značek (Prim, Bentime, JVD, Elton) a hodinky vyrobené v Česku. Srovnání cen v českých e-shopech."})
     return recs
 
 

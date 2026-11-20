@@ -172,7 +172,7 @@ def load_offers(shops):
                 "price": round(price), "was": round(float(r.get("was") or 0)), "url": r.get("url") or "", "go": r["go"],
                 "cat": cat, "cw": 2 if verdict[1] and verdict[0] == cat else 0.4 if cat == "unisex-hodinky" else 1,   # the title names the category: double; "unisex" = gender unknown, a weak vote
                 "path": r.get("cat") or "", "dims": X.dims(r["t"], desc, cat),
-                "colors": colors, "mats": mats, "styles": styles, "feats": feats,
+                "colors": colors, "mats": mats, "styles": styles, "feats": feats, "prm": r.get("prm") or {},
             })
         for path, c in per_path.items():
             n = sum(c.values())
@@ -388,8 +388,18 @@ def cluster(offers, shop_rank):
             "offers": shop_offers, "price": shop_offers[0]["price"], "variants": var if len(var) > 1 else [],
             "dims": dm, "wmin": widths[0] if widths else None, "wmax": widths[-1] if widths else None, "sizes": sizes,
             "colors": uniq("colors")[:4], "mats": uniq("mats")[:4], "styles": uniq("styles")[:2], "feats": uniq("feats"),
+            "prm": merged_prm(allo),
         })
     return products
+
+
+def merged_prm(offers):
+    """Shop parameters of a product: per key the value most shops agree on (a shop that gives parameters, e.g. Hodinky.cz, lends them to the same watch in other shops)."""
+    c = defaultdict(Counter)
+    for o in offers:
+        for k, v in (o.get("prm") or {}).items():
+            c[k][v] += 1
+    return {k: v.most_common(1)[0][0] for k, v in c.items()}
 
 
 VOCAB = None

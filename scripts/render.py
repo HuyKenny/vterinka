@@ -13,7 +13,7 @@ from urllib.parse import quote
 import taxonomy as X
 
 E = html.escape
-PER_PAGE = 30          # Kenny 16. 11. 2026: 30 products per listing page, then a clear link to the next page
+PER_PAGE = 28          # Kenny 20. 11. 2026: 28 products per listing page (7 rows of 4 next to the filter sidebar), then a clear link to the next page
 SUFFIX = " | Vteřinka"
 # prerender on hover; never /go/ (a prerender would count as a click at the network), /data/ or the search page
 SPECULATION = ('<script type="speculationrules">{"prerender":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/data/*"}},'

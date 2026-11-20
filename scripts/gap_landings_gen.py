@@ -48,7 +48,9 @@ T = [
 def main():
     pages = []
     for slug, h1, rules, o in T:
-        r = {"slug": slug, "h1": h1, "group": "gap-hodinky", "rules": {k: v for k, v in rules.items()}}
+        rules = dict(rules)
+        rules.setdefault("cat", [W])             # every hub is watches only: the room "hodinky" (jewellery has the same brands and words)
+        r = {"slug": slug, "h1": h1, "group": "gap-hodinky", "rules": rules}
         r["parent"] = o.get("parent")
         for k in ("hubs", "min", "index_min", "lead", "title", "desc", "dedupe_all"):
             if k in o:

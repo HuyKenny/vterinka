@@ -17,6 +17,8 @@ import taxonomy as X
 
 APP = Path(__file__).resolve().parent.parent
 MIN_DEFAULT, INDEX_MIN_DEFAULT = 6, 12
+BRAND_GENDER_CATS = {"panske-hodinky", "damske-hodinky", "detske-hodinky"}
+BRAND_GENDER_MIN = 10
 fold = X.fold
 
 # plural adjective forms: categories are feminine/masculine-inanimate plural ("pánské hodinky", "zlaté prsteny", "stříbrné náušnice"),
@@ -174,6 +176,12 @@ def generated_records(products, by_cat):
                 klas = watch and s_ == "elegantni"       # watches: people say "klasické hodinky" (110/month) as much as "elegantní" (140); the style rule catches both words
                 recs.append({**base, "slug": f"{cat}/{'klasicke' if klas else STYLE_SLUG[s_]}", "h1": phrase("klasick" if klas else STYLE_ADJ[s_], cat, noun),
                              "group": f"{cat}-style", "_pred": (lambda s_: lambda p: s_ in p["styles"])(s_), "facet": ("styles", s_)})
+        if cat in BRAND_GENDER_CATS:      # "pánské hodinky Casio", "dámské hodinky Michael Kors": the biggest uncovered family in the 11/2026 gap (brand x gender, 100-900 searches each)
+            for b, n in Counter(p["brand"] for p in items if p["brand"]).most_common():
+                bs = X.slugify(b)
+                if n >= BRAND_GENDER_MIN and bs and bs not in X.TREE:
+                    recs.append({**base, "slug": f"{cat}/{bs}", "h1": f"{noun} {b}", "group": f"{cat}-brand", "hubs": [f"/znacky/{bs}/"],
+                                 "_pred": (lambda b: lambda p: p["brand"] == b)(b), "facet": ("brand", b)})
         for f_, n in cnt("feats").most_common():
             if n < MIN_DEFAULT or (f_ in X.EARRING_FEATS and cat != "nausnice"):
                 continue

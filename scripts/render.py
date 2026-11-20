@@ -380,7 +380,7 @@ class Site:
         if not cats:
             return ""
         return f'<ul class="{cls}">' + "".join(
-            f'<li><a href="/{k}/"><img src="/img/ic/{icon or X.ICON[k]}.webp" alt="" width="{size}" height="{size}" loading="lazy"><span>{E(name)}</span><small>{n} {plural(n, "kus", "kusy", "kusů")}</small></a></li>'
+            f'<li><a href="/{k}/"><img src="/img/ic/{icon or X.ICON[k]}.webp" alt="" width="{size}" height="{size}" loading="lazy"><span>{E(name.partition("|")[0])}{('<span class="sr"> ' + E(name.partition("|")[2]) + "</span>") if "|" in name else ""}</span><small>{n} {plural(n, "kus", "kusy", "kusů")}</small></a></li>'
             for k, name, n, *ic in cats for icon in [ic[0] if ic else None]) + "</ul>"
 
     def chips(self, links, cls="chips"):
@@ -465,6 +465,9 @@ class Site:
         if brands:
             srch = '<input class="fsearch" type="search" placeholder="Hledat značku" aria-label="Hledat značku">' if len(brands) > 10 else ""
             pills.append(pill("brand", "Značka", srch + checks("brand", [(i, b, n) for i, b, n in brands])))
+        order = ["price", "brand", "feats", "styles", "mats", "fx", "dims", "colors", "seats", "shop"]      # what shoppers narrow by first (sidebar reads top to bottom)
+        gkey = lambda h: order.index(re.search(r'data-g="([a-z]+)', h).group(1)) if re.search(r'data-g="([a-z]+)', h).group(1) in order else len(order)
+        pills.sort(key=gkey)
         toggles = ('<label class="fbt"><input type="checkbox" name="sale" value="1"><span>Ve slevě</span></label>'
                    '<label class="fbt"><input type="checkbox" name="multi" value="1"><span>Ve více obchodech</span></label>')
         return ('<form class="filters" id="filters" aria-label="Filtry"><div class="fhead"><b>Všechny filtry</b><button class="fx" type="button" aria-label="Zavřít">✕</button></div>'

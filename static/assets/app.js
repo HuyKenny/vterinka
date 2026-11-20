@@ -248,7 +248,11 @@
     form.addEventListener("pointerenter", warm);
     form.addEventListener("focusin", warm);
     var pills = $$(".fb", form);
-    var closePills = function (except) { pills.forEach(function (p) { if (p !== except) p.open = false; }); };
+    var side = window.matchMedia("(min-width:981px)");      /* desktop: the form is a left sidebar, every group open and independent */
+    var closePills = function (except) { if (side.matches) return; pills.forEach(function (p) { if (p !== except) p.open = false; }); };
+    var layoutPills = function () { if (side.matches) { form.classList.remove("all"); pills.forEach(function (p) { p.open = true; }); if (shade) shade.hidden = true; document.body.style.overflow = ""; } else if (!form.classList.contains("all")) { pills.forEach(function (p) { p.open = false; }); } };
+    layoutPills();
+    side.addEventListener ? side.addEventListener("change", layoutPills) : side.addListener(layoutPills);
     pills.forEach(function (p) {
       p.addEventListener("toggle", function () {
         if (!p.open || form.classList.contains("all")) return;

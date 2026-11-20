@@ -1,0 +1,426 @@
+[
+ {
+  "slug": "g-shock-hodinky",
+  "h1": "G-Shock hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "g.?shock"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/casio/"
+  ],
+  "lead": "Odolné hodinky Casio G-Shock: nárazuvzdorné, vodotěsné, s datem a stopkami. Porovnejte ceny stejného modelu ve více obchodech."
+ },
+ {
+  "slug": "casio-edifice-hodinky",
+  "h1": "Casio Edifice hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "\\bedifice\\b"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/casio/"
+  ],
+  "lead": "Casio Edifice jsou sportovně elegantní chronografy s ocelovým pouzdrem. Najděte nejnižší cenu stejného modelu."
+ },
+ {
+  "slug": "casio-vintage-hodinky",
+  "h1": "Casio Vintage hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "\\bvintage\\b"
+   ],
+   "brand": [
+    "Casio"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/casio/"
+  ],
+  "lead": "Retro digitálky Casio Vintage v kovovém i černém provedení, od klasické řady F-91W po zlaté A168."
+ },
+ {
+  "slug": "casio-digitalni-hodinky",
+  "h1": "Casio digitální hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "brand": [
+    "Casio"
+   ],
+   "feats": [
+    "digitalni"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/casio/",
+   "/digitalni-hodinky/"
+  ]
+ },
+ {
+  "slug": "retro-digitalni-hodinky",
+  "h1": "Retro digitální hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "feats": [
+    "digitalni"
+   ],
+   "styles": [
+    "retro"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/digitalni-hodinky/",
+   "/retro-hodinky/"
+  ]
+ },
+ {
+  "slug": "citizen-eco-drive-hodinky",
+  "h1": "Citizen Eco-Drive hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "eco.?drive"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/citizen/",
+   "/solarni-hodinky/"
+  ],
+  "lead": "Hodinky Citizen Eco-Drive se nabíjejí světlem a nepotřebují baterii. Srovnání cen napříč obchody."
+ },
+ {
+  "slug": "armani-hodinky",
+  "h1": "Armani hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "brand": [
+    "Emporio Armani",
+    "Armani Exchange",
+    "Armani"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/emporio-armani/",
+   "/znacky/armani-exchange/"
+  ],
+  "lead": "Hodinky Emporio Armani a Armani Exchange pro muže i ženy na jednom místě."
+ },
+ {
+  "slug": "svycarske-hodinky",
+  "h1": "Švýcarské hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "brand": [
+    "Tissot",
+    "Certina",
+    "Rado",
+    "Hamilton",
+    "Longines",
+    "Swiss Military",
+    "Victorinox",
+    "Wenger",
+    "Mido",
+    "Edox",
+    "Maurice Lacroix",
+    "Frederique Constant",
+    "Oris",
+    "Tag Heuer",
+    "Raymond Weil",
+    "Rolex",
+    "Omega",
+    "Doxa",
+    "Traser",
+    "Balmain",
+    "Swatch",
+    "Candino",
+    "Eterna",
+    "Rotary",
+    "Mondaine",
+    "Zeno-Watch",
+    "Epos",
+    "Davosa"
+   ]
+  },
+  "parent": null,
+  "lead": "Hodinky od švýcarských značek, od Swatch po Tissot, Certinu a Hamilton. Porovnejte cenu stejného modelu.",
+  "title": "Švýcarské hodinky – ceny, srovnání obchodů"
+ },
+ {
+  "slug": "levne-hodinky",
+  "h1": "Levné hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "price": [
+    null,
+    1000
+   ]
+  },
+  "parent": null,
+  "lead": "Hodinky do 1 000 Kč: kvalitní quartz, které vydrží roky. Seřazeno podle toho, co obchody skutečně prodávají.",
+  "dedupe_all": true
+ },
+ {
+  "slug": "levne-panske-hodinky",
+  "h1": "Levné pánské hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "panske-hodinky"
+   ],
+   "price": [
+    null,
+    1500
+   ]
+  },
+  "parent": "/panske-hodinky/",
+  "dedupe_all": true
+ },
+ {
+  "slug": "levne-damske-hodinky",
+  "h1": "Levné dámské hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "damske-hodinky"
+   ],
+   "price": [
+    null,
+    1500
+   ]
+  },
+  "parent": "/damske-hodinky/",
+  "dedupe_all": true
+ },
+ {
+  "slug": "nejlepsi-panske-hodinky",
+  "h1": "Nejlepší pánské hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "panske-hodinky"
+   ],
+   "offers": 3
+  },
+  "parent": "/panske-hodinky/",
+  "lead": "Pánské hodinky, které najdete ve třech a více obchodech. Když je nabízí víc prodejců, bývají prověřené a cena se dá srovnat."
+ },
+ {
+  "slug": "nejlepsi-damske-hodinky",
+  "h1": "Nejlepší dámské hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "damske-hodinky"
+   ],
+   "offers": 3
+  },
+  "parent": "/damske-hodinky/",
+  "lead": "Dámské hodinky, které najdete ve třech a více obchodech. Srovnání cen u nejčastěji nabízených modelů."
+ },
+ {
+  "slug": "hodinky-pro-seniory",
+  "h1": "Hodinky pro seniory",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "senior",
+    "velk\\w* (cifern|cisl)",
+    "snadno citeln",
+    "babick",
+    "dedecek"
+   ],
+   "scope": "text"
+  },
+  "parent": null,
+  "lead": "Hodinky s velkým čitelným ciferníkem a pohodlným řemínkem, které se dobře odečítají i bez brýlí."
+ },
+ {
+  "slug": "damske-hodinky-s-kaminky",
+  "h1": "Dámské hodinky s kamínky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "damske-hodinky"
+   ],
+   "any": [
+    "kamin",
+    "zirkon",
+    "krystal",
+    "swarovsk",
+    "brilian"
+   ]
+  },
+  "parent": "/damske-hodinky/"
+ },
+ {
+  "slug": "detske-hodinky-pro-kluky",
+  "h1": "Dětské hodinky pro kluky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "detske-hodinky"
+   ],
+   "any": [
+    "\\bkluk\\w*",
+    "\\bchlapc\\w*",
+    "\\bboy\\w*"
+   ],
+   "scope": "text"
+  },
+  "parent": "/detske-hodinky/"
+ },
+ {
+  "slug": "detske-hodinky-pro-holky",
+  "h1": "Dětské hodinky pro holky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "detske-hodinky"
+   ],
+   "any": [
+    "\\bholk\\w*",
+    "\\bholc\\w*",
+    "\\bdivk\\w*",
+    "\\bgirl\\w*",
+    "princez"
+   ],
+   "scope": "text"
+  },
+  "parent": "/detske-hodinky/"
+ },
+ {
+  "slug": "detske-rucickove-hodinky",
+  "h1": "Dětské ručičkové hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "detske-hodinky"
+   ],
+   "any": [
+    "rucick",
+    "analog"
+   ],
+   "scope": "text"
+  },
+  "parent": "/detske-hodinky/",
+  "lead": "Klasické hodinky s ručičkami pro děti. Na nich se dítě nejlépe naučí poznávat čas."
+ },
+ {
+  "slug": "reminky-na-hodinky-22-mm",
+  "h1": "Řemínky na hodinky 22 mm",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "reminky"
+   ],
+   "any": [
+    "\\b22 ?mm"
+   ]
+  },
+  "parent": "/reminky/"
+ },
+ {
+  "slug": "reminky-na-hodinky-20-mm",
+  "h1": "Řemínky na hodinky 20 mm",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "reminky"
+   ],
+   "any": [
+    "\\b20 ?mm"
+   ]
+  },
+  "parent": "/reminky/"
+ },
+ {
+  "slug": "reminky-na-hodinky-18-mm",
+  "h1": "Řemínky na hodinky 18 mm",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "reminky"
+   ],
+   "any": [
+    "\\b18 ?mm"
+   ]
+  },
+  "parent": "/reminky/"
+ },
+ {
+  "slug": "kozene-reminky-na-hodinky",
+  "h1": "Kožené řemínky na hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "reminky"
+   ],
+   "any": [
+    "kozen",
+    "\\bkuze\\b",
+    "\\bkuzi\\b"
+   ]
+  },
+  "parent": "/reminky/"
+ },
+ {
+  "slug": "kovove-reminky-na-hodinky",
+  "h1": "Kovové řemínky na hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "reminky"
+   ],
+   "any": [
+    "\\bkovov",
+    "\\bocelov",
+    "milansk",
+    "\\btah\\b"
+   ]
+  },
+  "parent": "/reminky/"
+ },
+ {
+  "slug": "silikonove-reminky-na-hodinky",
+  "h1": "Silikonové řemínky na hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "reminky"
+   ],
+   "any": [
+    "silikon",
+    "gumov"
+   ]
+  },
+  "parent": "/reminky/"
+ },
+ {
+  "slug": "nylonove-reminky-na-hodinky",
+  "h1": "Nylonové a textilní řemínky na hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "reminky"
+   ],
+   "any": [
+    "nylon",
+    "textil",
+    "\\bnato\\b"
+   ]
+  },
+  "parent": "/reminky/"
+ }
+]

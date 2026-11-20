@@ -184,5 +184,25 @@
     "naramky"
    ]
   }
+ },
+ {
+  "slug": "sperk-nebo-hodinky-vanocni-darek",
+  "h1": "Šperk, nebo hodinky? Vánoční dárek podle rozpočtu a koho obdarováváte",
+  "title": "Šperk, nebo hodinky? Vánoční dárek podle rozpočtu",
+  "date": "2026-11-22",
+  "related": [
+   "/damske-hodinky/",
+   "/panske-hodinky/",
+   "/retizky/",
+   "/nausnice/"
+  ],
+  "rules": {
+   "cat": [
+    "damske-hodinky",
+    "panske-hodinky",
+    "retizky",
+    "nausnice"
+   ]
+  }
  }
 ]

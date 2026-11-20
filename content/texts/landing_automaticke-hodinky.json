@@ -1,0 +1,23 @@
+{
+ "key": "landing:automaticke-hodinky",
+ "intro": "Automatické hodinky se natahují pohybem ruky a nepotřebují baterii. Mechanický strojek vydrží generace, vyžaduje jen občasný servis.",
+ "body": "<h2>Jak automatické hodinky fungují</h2>\n<p>Automatický strojek se natahuje pomocí rotoru, který se otáčí při pohybu zápěstí. Po natažení hodinky běží několik desítek hodin a pokud je nenosíte, zastaví se a po opětovném nasazení se rozběhnou. Nepotřebují baterii a patří mezi nejoblíbenější hodinky sběratelů.</p>\n<h2>Na co se při výběru dívat</h2>\n<ul><li><strong>Rezerva chodu.</strong> Doba, po kterou hodinky běží, pokud je nenosíte. U běžných modelů 38 až 50 hodin, u některých až 80.</li>\n<li><strong>Přesnost.</strong> Mechanika se liší o několik sekund denně, proti kvarcu je to míň přesné, ale pro každodenní nošení postačí.</li>\n<li><strong>Servis.</strong> Mechanické hodinky vyžadují přibližně po pěti až osmi letech údržbu u hodináře.</li>\n<li><strong>Průhledné víčko.</strong> U modelů se skeletovým ciferníkem nebo průhledným dnem vidíte chod strojku. Podívejte se na <a href=\"/panske-hodinky/skeleton/\">skeleton hodinky</a>.</li></ul>\n<p>Značky jako Seiko, Orient nebo Tissot nabízejí automatické hodinky už za střední cenu. Mechaniku na ruční natahování najdete v samostatné kategorii <a href=\"/mechanicke-hodinky/\">mechanických hodinek</a>.</p>\n<h2>Jak automatické hodinky nosit a uložit</h2>\n<p>Pokud hodinky nosíte denně, strojek se natahuje sám. Při delší pauze je lze uložit do natahovače, který je pomalu otáčí. Datum se u většiny mechanik nepřepíná v době přibližně mezi devátou večer a třetí ráno, protože by se mohl poškodit převod. Před zasunutím korunky ověřte, jestli je utažená, a vyhněte se silným magnetům.</p>\n<h2>Kolik automatické hodinky stojí</h2><p>Cena závisí hlavně na značce a zpracování strojku. Základní automaty japonských značek jsou cenově dostupné, švýcarské modely stojí víc. Při srovnání se vyplatí sledovat rezervu chodu, materiál sklíčka a nabídku servisu. Pro hodinky, které nosíte denně, stačí rezerva chodu kolem dvou dnů.</p>",
+ "faq": [
+  [
+   "Musím automatické hodinky natahovat?",
+   "Natahují se pohybem ruky. Když je delší dobu nenosíte, stačí je před nasazením ručně nastavit a natáhnout korunkou."
+  ],
+  [
+   "Jak přesné jsou automatické hodinky?",
+   "Odchylka bývá v řádu sekund za den. Kvarc je přesnější."
+  ],
+  [
+   "Jak často je potřeba servis?",
+   "Zhruba po pěti až osmi letech, u dražších strojků po deseti."
+  ],
+  [
+   "Je automat lepší než kvarc?",
+   "Není lepší, je jiný. Kvarc je přesný a nenáročný, automat je hodinářské řemeslo a vydrží generace."
+  ]
+ ]
+}

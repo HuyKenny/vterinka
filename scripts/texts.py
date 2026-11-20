@@ -68,4 +68,30 @@ def generated(key, items, h1, S):
     prose = (f"<h2>{E(h1)}: přehled nabídky</h2><p>Na této stránce je {n} {R.plural(n, 'kus', 'kusy', 'kusů')} z českých e‑shopů, "
              f"ceny od {R.kc(lo)} do {R.kc(hi)}.{colours} Nahoře jsou kusy, které najdete ve více obchodech, u nich má srovnání největší smysl. "
              "Filtry zúží výběr podle velikosti, ceny, barvy, materiálu, značky nebo obchodu.</p>")
+    if n >= 12:
+        prose += _extra(items, h1, ps, med, E)
     return prose, q
+
+
+def _extra(items, h1, ps, med, E):
+    """Data-driven sections that make every listing page different (and link the products people compare most): models in the most shops, the price spread
+    and what the offer is made of (movement, case, strap, water resistance, shape). Every figure is counted from the current catalogue."""
+    n = len(items)
+    out = ""
+    best = sorted((p for p in items if p.get("page", True) and p.get("slug")), key=lambda p: (-len(p["offers"]), p["price"]))[:5]
+    if len(best) >= 3 and len(best[0]["offers"]) > 1:
+        li = "".join(f'<li><a href="/produkt/{p["slug"]}/">{E(p["name"])}</a>: od {R.kc(p["price"])}, {len(p["offers"])} {R.plural(len(p["offers"]), "obchod", "obchody", "obchodů")}</li>' for p in best)
+        out += f"<h3>Nejčastěji srovnávané: {E(h1)}</h3><p>Tyto kusy najdete v nejvíc obchodech, takže se u nich cena liší nejvíc.</p><ul>{li}</ul>"
+    q1, q3 = ps[n // 4], ps[(3 * n) // 4]
+    out += (f"<h3>Kolik stojí {E(h1)}</h3><p>Čtvrtina nabídky stojí do {R.kc(q1)}, polovina do {R.kc(med)} a nejdražší čtvrtina od {R.kc(q3)}. "
+            "Ceny kontrolujeme každou noc a u každého kusu ukazujeme nejnižší cenu a obchod, který ji nabízí.</p>")
+    bits = []
+    for key, word in (("mov", "strojek"), ("casemat", "pouzdro"), ("strap", "řemínek"), ("wr", "vodotěsnost"), ("shape", "tvar pouzdra")):
+        c = Counter(v for p in items for v in (p.get("fx") or {}).get(key, []))
+        have = sum(1 for p in items if (p.get("fx") or {}).get(key))
+        if c and have >= max(6, n * 0.4):
+            v, k = c.most_common(1)[0]
+            bits.append(f"{word}: {E(X.FACET_VALUE[key][v])} ({round(100 * k / have)} %)")
+    if len(bits) >= 2:
+        out += "<h3>Z čeho se nabídka skládá</h3><p>Nejčastější provedení: " + ", ".join(bits) + ". Ve filtru vlevo si zúžíte výběr podle libovolné z těchto vlastností.</p>"
+    return out

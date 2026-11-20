@@ -194,10 +194,17 @@ def paged(out, S, path, items, render, group="listings", index=True, per=None):
 
 
 def price_stats(items):
+    """(entry price, median, highest). The entry price skips a lone outlier: "od 52 Kč" over 1 356 gold earrings is a spare part, not an offer a visitor expects
+    (a result that promises a price it does not deliver loses the click and the trust); below 3 % of the list and under half of the 3rd percentile it is ignored."""
     ps = sorted(p["price"] for p in items)
     if not ps:
         return 0, 0, 0
-    return ps[0], int(statistics.median(ps)), ps[-1]
+    lo = ps[0]
+    if len(ps) >= 30:
+        p3 = ps[int(len(ps) * 0.03)]
+        if lo < 0.5 * p3:
+            lo = p3
+    return lo, int(statistics.median(ps)), ps[-1]
 
 
 def cat_name(k):
@@ -727,6 +734,18 @@ def category_desc(h1, n, shops, lo, k=None):
             f"✓ filtr podle {what} ✓ ceny ověřujeme každou noc.")
 
 
+def listing_desc(h1, items, S, lo):
+    """Meta description from the page's own data (count, entry price, shops, most common brands, the comparison promise), <= ~158 chars: every page differs."""
+    n = len(items)
+    shops = len({o["shop"] for p in items for o in p["offers"]})
+    brands = [b for b, _ in Counter(p["brand"] for p in items if p["brand"]).most_common(3)]
+    d = f"{h1}: {n} {R.plural(n, 'kus', 'kusy', 'kusů')} od {R.kc(lo)} z {shops} {R.plural(shops, 'obchodu', 'obchodů', 'obchodů')}"
+    if len(brands) >= 2 and not any(b.lower() in h1.lower() for b in brands):
+        d += ". Nejčastěji " + ", ".join(brands)
+    d += ". Cena stejného modelu v obchodech vedle sebe ✓ ověřeno dnes"
+    return d if len(d) <= 160 else d[:157].rsplit(" ", 1)[0] + "…"
+
+
 def fresh():
     return f"Ceny jsme naposledy ověřili {TODAY.day}. {TODAY.month}."
 
@@ -766,10 +785,8 @@ def landing_page(S, L, items, jsn):
     lo, med, hi = price_stats(items)
     n = len(items)
     shops = len({o["shop"] for p in items for o in p["offers"]})
-    title = (L.get("title") or f"{h1} – srovnání cen od {R.kc(lo)}") + (SUFFIX if "Vteřinka" not in (L.get("title") or "") else "")
-    if len(title) > 72 and not L.get("title"):
-        title = f"{h1} – ceny od {R.kc(lo)}" + SUFFIX
-    desc = L.get("desc") or f"{h1}: {n} {R.plural(n, 'kus', 'kusy', 'kusů')} z {shops} českých e‑shopů, ceny od {R.kc(lo)}. Porovnejte parametry a ceny v obchodech."
+    title = (L["title"] + (SUFFIX if "Vteřinka" not in L["title"] else "")) if L.get("title") else category_title(h1, n, lo)       # same pattern as the categories: phrase, count, entry price
+    desc = L.get("desc") or listing_desc(h1, items, S, lo)
     lead = L.get("lead") or f"{n} {R.plural(n, 'kus', 'kusy', 'kusů')} z {shops} {R.plural(shops, 'obchodu', 'obchodů', 'obchodů')}, ceny od {R.kc(lo)} do {R.kc(hi)}."
     par = L["parent"]
     sibs = [x for x in S.kids.get(par, []) if x[0] != path] if par else []
@@ -793,8 +810,9 @@ def brand_page(S, b, items, jsn):
     lo, med, hi = price_stats(items)
     cats = Counter(p["cat"] for p in items).most_common(8)
     watch = sum(1 for p in items if p["cat"] in X.WATCH_CATS) >= len(items) / 2
-    title = (f"Hodinky {name} – srovnání cen" if watch else f"{name} šperky – srovnání cen") + SUFFIX
-    desc = f"{name}: {len(items)} {R.plural(len(items), 'kus', 'kusy', 'kusů')} v českých e‑shopech, ceny od {R.kc(lo)}. Porovnejte ceny v obchodech."
+    bh1 = f"Hodinky {name}" if watch else f"{name} šperky"
+    title = category_title(bh1, len(items), lo)
+    desc = listing_desc(bh1, items, S, lo)
     lead = f"{len(items)} {R.plural(len(items), 'kus', 'kusy', 'kusů')} značky {E(name)}, nejčastěji " + ", ".join(cat_name(c).lower() for c, _ in cats[:3]) + "."
     links = [(f"/{c}/", cat_name(c), n) for c, n in cats]
     body, lds = listing_body(S, f"/znacky/{b}/", E(name), lead, items, jsn, None, texts_key=f"brand:{b}", links=links, links_label="Kategorie")
@@ -1012,6 +1030,16 @@ def home_page(S, products, by_room, by_cat, sale):
     hubs = [L for L in S.landings.values() if L["parent"] is None and L["index"]]
     wh = [L for L in hubs if "hodinky" in L["slug"]]
     jh = [L for L in hubs if "sperky" in L["slug"]]
+    # most searched brands first (Google Ads CZ 11/2026: casio 9 900, g-shock 5 400, tissot 5 400, pandora 14 800 with "náramek", seiko 4 400, prim 3 600, swarovski, citizen/festina 2 900)
+    bch = []
+    for label, path in (("Casio", "/znacky/casio/"), ("G-Shock", "/g-shock-hodinky/"), ("Tissot", "/znacky/tissot/"), ("Seiko", "/znacky/seiko/"), ("Prim", "/znacky/prim/"), ("Citizen", "/znacky/citizen/"),
+                        ("Festina", "/znacky/festina/"), ("Orient", "/znacky/orient/"), ("Timex", "/znacky/timex/"), ("Fossil", "/znacky/fossil/"), ("Daniel Wellington", "/znacky/daniel-wellington/"),
+                        ("Michael Kors", "/znacky/michael-kors/"), ("Pandora", "/znacky/pandora/"), ("Swarovski", "/znacky/swarovski/"), ("Tous", "/znacky/tous/"), ("Guess", "/znacky/guess/")):
+        b = path.split("/")[-2]
+        n_b = len(S.ctx["brands"].get(b, [])) if path.startswith("/znacky/") else (S.landings[path]["n"] if path in S.landings else 0)
+        if n_b >= 10:
+            bch.append((path, label, n_b))
+    brand_chips = S.chips(bch) if len(bch) >= 6 else ""
     picks = S.chips([(L["path"], L["h1"], L["n"]) for L in sorted(wh, key=lambda L: -L["n"])[:10]])
     jpicks = S.chips([(L["path"], L["h1"], L["n"]) for L in sorted(jh, key=lambda L: -L["n"])[:10]])
     guides_sec = (f'<section class="sec"><div class="sec__h"><h2>Z poradny</h2><a href="/poradna/">Všechny články →</a></div>' + S.chips([(p, g["h1"], 0) for p, g in list(S.guides.items())[:8]]) + "</section>") if S.guides else ""
@@ -1032,6 +1060,7 @@ def home_page(S, products, by_room, by_cat, sale):
 <div class="hero__art"><img src="/img/ui/hero-1200.webp" srcset="/img/ui/hero-640.webp 640w, /img/ui/hero-1200.webp 1200w" sizes="(max-width:980px) 92vw, 620px" alt="Hodinářský pracovní stůl s náramkovými hodinkami, lupou a prstenem" width="1200" height="800" fetchpriority="high"></div></div></section>
 <div class="wrap"><section class="sec"><div class="sec__h"><h2>Nejhledanější kategorie</h2><a href="/kategorie/">Všechny kategorie →</a></div>{tiles}</section>
 <section class="sec"><div class="sec__h"><h2>Hodinky ve více obchodech najednou</h2><a href="/panske-hodinky/">Pánské hodinky →</a></div>{row(hot)}</section>
+{f'<section class="sec"><div class="sec__h"><h2>Nejhledanější značky</h2><a href="/znacky/">Všechny značky →</a></div>{brand_chips}</section>' if brand_chips else ''}
 {f'<section class="sec"><div class="sec__h"><h2>Hodinky podle strojku a stylu</h2></div>{picks}</section>' if wh else ''}
 {f'<section class="sec"><div class="sec__h"><h2>Hodinky ve slevě</h2><a href="/slevy/">Všechny slevy →</a></div>{row(sale)}</section>' if sale else ''}
 {f'<section class="sec"><div class="sec__h"><h2>A k hodinkám šperky</h2><a href="/sperky/">Všechny šperky →</a></div>{row(jewels)}</section>' if jewels else ''}

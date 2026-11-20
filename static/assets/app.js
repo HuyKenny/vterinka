@@ -230,7 +230,18 @@
       else { var p = b.dataset.c.split("|"); $$('input[name="' + p[0] + '"]', form).forEach(function (c) { if (c.value === p.slice(1).join("|")) c.checked = false; }); }
       shown = PER; apply();
     });
-    form.addEventListener("change", function () { shown = PER; apply(); });
+    /* the brand filter of a gender category leads to the page "<category> <brand>" (own URL, own heading) when it is the only filter set; otherwise it filters in place */
+    var brandPages = null;
+    try { brandPages = JSON.parse(form.dataset.brandpages || "null"); } catch (e) { brandPages = null; }
+    form.addEventListener("change", function (e) {
+      var t = e.target;
+      if (brandPages && t && t.name === "brand" && t.checked) {
+        var f = active();
+        var others = Object.keys(f).some(function (k) { return k !== "brand" && (Array.isArray(f[k]) ? f[k].length : f[k]); });
+        if (f.brand.length === 1 && !others && brandPages[f.brand[0]]) { location.href = brandPages[f.brand[0]]; return; }
+      }
+      shown = PER; apply();
+    });
     var wt;
     $$("input[type=number]", form).forEach(function (i) { i.addEventListener("input", function () { clearTimeout(wt); wt = setTimeout(function () { shown = PER; apply(); }, 350); }); });
     sortSel && sortSel.addEventListener("change", function () { shown = PER; apply(); });

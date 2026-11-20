@@ -659,7 +659,7 @@ def gone_page(S, g):
                     body, crumbs=crumbs_for(k) + [(R.shorten(g["name"], 60), f"/produkt/{g['slug']}/")], noindex=True)
 
 
-def listing_body(S, path, h1, lead, items, jsn, icon, texts_key=None, extra_ld=None, links=None, links_label="Upřesnit", extra=""):
+def listing_body(S, path, h1, lead, items, jsn, icon, texts_key=None, extra_ld=None, links=None, links_label="Upřesnit", extra="", brand_pages=None):
     t = TX.get(texts_key) if texts_key else None
     intro = t["intro"] if t and t.get("intro") else ""
     if intro and fresh() in lead:       # hand-written intros replace the lead; keep the "prices checked" date
@@ -679,7 +679,10 @@ def listing_body(S, path, h1, lead, items, jsn, icon, texts_key=None, extra_ld=N
     if t and t.get("faq"):
         qa = t["faq"]
     faq_html, faq_ld = S.faq(qa)
-    body = band + f'<div class="wrap">{S.listing(items, jsn, facets=facets(items, cats, links_label))}' + \
+    fc = facets(items, cats, links_label)
+    if brand_pages:
+        fc["brandpages"] = brand_pages
+    body = band + f'<div class="wrap">{S.listing(items, jsn, facets=fc)}' + \
         (f'<div class="prose">{prose}</div><!--/prose-->' if prose else "") + faq_html + "</div>"
     return body, [faq_ld] + (extra_ld or [])
 
@@ -746,10 +749,9 @@ def category_page(S, k, items, jsn):
         tt = [(f"{k}/{slug}", f"{label}| {name[:1].lower() + name[1:]}", S.landings[f"/{k}/{slug}/"]["n"], icon)
               for slug, label, icon in WATCH_TYPES if f"/{k}/{slug}/" in S.landings]
         types = (f'<p class="tilelab">{E(name)} podle typu</p>' + S.tiles(tt)) if tt else ""
-        bc = Counter(p["brand"] for p in items if p["brand"])
-        bt = [(f"/{k}/{X.slugify(b)}/", b, n) for b, n in bc.most_common(14) if f"/{k}/{X.slugify(b)}/" in S.landings]
-        types += (f'<p class="tilelab">{E(name)} podle značky</p>' + S.chips(bt, "chips brandchips")) if len(bt) >= 3 else ""
-    body, lds = listing_body(S, f"/{k}/", E(h1), lead, items, jsn, X.ICON[k], texts_key=f"cat:{k}", links=[], links_label="Upřesnit",
+    bp = {b: f"/{k}/{X.slugify(b)}/" for b in {p["brand"] for p in S.ctx["by_cat"][k] if p["brand"]}
+          if f"/{k}/{X.slugify(b)}/" in S.landings} if k in LD.BRAND_GENDER_CATS else {}      # filter "Značka" -> its own page (Kenny 20. 11.)
+    body, lds = listing_body(S, f"/{k}/", E(h1), lead, items, jsn, X.ICON[k], texts_key=f"cat:{k}", links=[], links_label="Upřesnit", brand_pages=bp,
                              extra=types + ((f'<p class="tilelab">Další hodinky</p>' + S.chips([(f"/{c}/", nm, n) for c, nm, n in sibs])) if types and sibs else S.tiles(sibs)))
     return S.layout(f"/{k}/", title, desc, body, crumbs=crumbs_for(k), jsonld=lds, full=True)
 

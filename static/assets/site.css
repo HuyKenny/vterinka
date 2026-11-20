@@ -468,7 +468,7 @@ footer .logo img{width:104px}
 .shoptiles a:hover{transform:translate(-2px,-2px);box-shadow:var(--sh-s)}
 .shoptiles .slogo{border:0;padding:0;background:none;max-width:100%;max-height:40px;width:auto;height:auto;object-fit:contain;filter:grayscale(1) contrast(1.05);opacity:.72;mix-blend-mode:multiply;transition:filter .15s,opacity .15s}
 .shoptiles a:hover .slogo{filter:none;opacity:1}
-@media(max-width:1180px){.shoptiles{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:860px){.shoptiles{grid-template-columns:repeat(4,minmax(0,1fr))}.shoptiles li:nth-child(n+13){display:none}}
 @media(max-width:640px){.shoptiles{grid-template-columns:repeat(3,minmax(0,1fr))}.shoptiles a{height:62px;padding:8px}.shoptiles .slogo{max-height:30px}}
 @media(max-width:720px){.slogo{max-width:96px;height:auto}.slogo--big{max-width:150px}}
 .filters.all .fb legend{display:none!important}

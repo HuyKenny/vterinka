@@ -990,7 +990,7 @@ def home_page(S, products, by_room, by_cat, sale):
     jpicks = S.chips([(L["path"], L["h1"], L["n"]) for L in sorted(jh, key=lambda L: -L["n"])[:10]])
     guides_sec = (f'<section class="sec"><div class="sec__h"><h2>Z poradny</h2><a href="/poradna/">Všechny články →</a></div>' + S.chips([(p, g["h1"], 0) for p, g in list(S.guides.items())[:8]]) + "</section>") if S.guides else ""
     cnt = Counter(o["shop"] for p in products for o in p["offers"])
-    top_shops = [sid for sid, _ in cnt.most_common() if S.shop(sid).get("logo")][:21]
+    top_shops = [sid for sid, _ in cnt.most_common() if S.shop(sid).get("logo")][:14]
     shop_strip = (f'<section class="sec"><div class="sec__h"><h2>Obchody, které srovnáváme</h2><a href="/obchody/">Všech {len(cnt)} obchodů →</a></div><ul class="shoptiles">'
                   + "".join(f'<li><a href="/obchody/{sid}/" title="{E(S.shop(sid)["name"])}">{R.shop_logo(S.shop(sid))}</a></li>' for sid in top_shops)
                   + "</ul></section>") if len(top_shops) >= 4 else ""

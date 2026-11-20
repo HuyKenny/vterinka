@@ -176,7 +176,11 @@
    "network": "ehub",
    "a_bid": "a7bce6ab",
    "feed_key": "eh_eppi",
-   "color": "#8A6D3B"
+   "color": "#8A6D3B",
+   "logo": "/img/shops/eppi.webp",
+   "lw": 194,
+   "lh": 120,
+   "logo_src": 22706
   },
   {
    "id": "francobene",
@@ -185,7 +189,11 @@
    "network": "ehub",
    "a_bid": "e101cf7d",
    "feed_key": "eh_francobene",
-   "color": "#444444"
+   "color": "#444444",
+   "logo": "/img/shops/francobene.webp",
+   "lw": 360,
+   "lh": 65,
+   "logo_src": 17911
   },
   {
    "id": "ocelovesperky",
@@ -194,7 +202,11 @@
    "network": "ehub",
    "a_bid": "3bd9c184",
    "feed_key": "eh_ocelovesperky",
-   "color": "#2C7BE5"
+   "color": "#2C7BE5",
+   "logo": "/img/shops/ocelovesperky.webp",
+   "lw": 254,
+   "lh": 120,
+   "logo_src": 22953
   },
   {
    "id": "brunoshop",
@@ -203,7 +215,11 @@
    "network": "ehub",
    "a_bid": "925e22e1",
    "feed_key": "eh_brunoshop",
-   "color": "#7A5C3E"
+   "color": "#7A5C3E",
+   "logo": "/img/shops/brunoshop.webp",
+   "lw": 360,
+   "lh": 70,
+   "logo_src": 17802
   },
   {
    "id": "marre",
@@ -212,7 +228,11 @@
    "network": "ehub",
    "a_bid": "75b5dc73",
    "feed_key": "eh_marre",
-   "color": "#B08D57"
+   "color": "#B08D57",
+   "logo": "/img/shops/marre.webp",
+   "lw": 360,
+   "lh": 104,
+   "logo_src": 22887
   },
   {
    "id": "olivie",
@@ -221,7 +241,11 @@
    "network": "ehub",
    "a_bid": "f9924854",
    "feed_key": "eh_olivie",
-   "color": "#5B3A7A"
+   "color": "#5B3A7A",
+   "logo": "/img/shops/olivie.webp",
+   "lw": 360,
+   "lh": 113,
+   "logo_src": 18104
   },
   {
    "id": "zlatnictvinoemi",
@@ -230,7 +254,11 @@
    "network": "ehub",
    "a_bid": "19c5d1a3",
    "feed_key": "eh_zlatnictvinoemi",
-   "color": "#C2185B"
+   "color": "#C2185B",
+   "logo": "/img/shops/zlatnictvinoemi.webp",
+   "lw": 198,
+   "lh": 120,
+   "logo_src": 23188
   },
   {
    "id": "klenotyaurum",
@@ -239,7 +267,11 @@
    "network": "affiliateport",
    "offer": "451",
    "feed_key": "ap_451",
-   "color": "#B08D57"
+   "color": "#B08D57",
+   "logo": "/img/shops/klenotyaurum.webp",
+   "lw": 328,
+   "lh": 120,
+   "logo_src": 5765
   },
   {
    "id": "zaminutu",
@@ -248,7 +280,11 @@
    "network": "affiliateport",
    "offer": "1177",
    "feed_key": "ap_1177",
-   "color": "#E2231A"
+   "color": "#E2231A",
+   "logo": "/img/shops/zaminutu.webp",
+   "lw": 360,
+   "lh": 87,
+   "logo_src": 18284
   },
   {
    "id": "pavona",
@@ -257,7 +293,11 @@
    "network": "ehub",
    "a_bid": "291f04d0",
    "feed_key": "eh_evolutiongroup",
-   "color": "#6B4E9B"
+   "color": "#6B4E9B",
+   "logo": "/img/shops/pavona.webp",
+   "lw": 360,
+   "lh": 89,
+   "logo_src": 22987
   }
  ]
 }

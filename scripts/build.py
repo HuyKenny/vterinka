@@ -972,8 +972,8 @@ def search_page(S):
 
 
 # the most searched categories, in order of demand (pánské hodinky, dámské hodinky, prsteny, náušnice, náramky…)
-HOME_CATS = ["panske-hodinky", "damske-hodinky", "detske-hodinky", "prsteny", "nausnice", "nahrdelniky", "naramky", "privesky",
-             "snubni-prsteny", "retizky", "koralky-na-naramky", "reminky", "sperkovnice", "kapesni-hodinky"]
+HOME_CATS = ["panske-hodinky", "damske-hodinky", "detske-hodinky", "digitalni-hodinky", "klasicke-hodinky", "sportovni-hodinky", "kapesni-hodinky",
+             "prsteny", "nausnice", "nahrdelniky", "naramky", "snubni-prsteny", "privesky", "retizky"]       # row 1 watches, row 2 jewellery (7 tiles per row); the three types are hub pages
 SHOWCASE_MIN_PRICE = 900
 
 
@@ -997,7 +997,8 @@ def home_page(S, products, by_room, by_cat, sale):
         hot += [p for p in showcase(products, n=10, per_cat=5, cats=X.WATCH_CATS) if p not in hot][:10 - len(hot)]
     jewels = showcase(multi, n=5, per_cat=2, cats=X.JEWEL_CATS) or showcase(products, n=5, per_cat=2, cats=X.JEWEL_CATS)
     sale = showcase(sale, n=5, per_cat=3, cats=X.WATCH_CATS) or showcase(sale, n=5)
-    tiles = S.tiles([(k, cat_name(k), len(by_cat[k])) for k in HOME_CATS if k in S.cat_ok], "cattiles", 96)
+    tiles = S.tiles([(k, R.NAV_HUBS[k][0], S.landings[f"/{k}/"]["n"], R.NAV_HUBS[k][1]) if k in R.NAV_HUBS else (k, cat_name(k), len(by_cat[k]))
+                                   for k in HOME_CATS if (k in R.NAV_HUBS and f"/{k}/" in S.landings) or (k not in R.NAV_HUBS and k in S.cat_ok)], "cattiles", 96)
     hubs = [L for L in S.landings.values() if L["parent"] is None and L["index"]]
     wh = [L for L in hubs if "hodinky" in L["slug"]]
     jh = [L for L in hubs if "sperky" in L["slug"]]

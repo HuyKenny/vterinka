@@ -1,0 +1,2 @@
+# old URL -> new URL, status (build.py redirects_file)
+/poradna/velikost-prstenu-jak-zmerit/ /poradna/jak-zjistit-velikost-prstenu/ 301

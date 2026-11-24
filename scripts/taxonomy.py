@@ -217,7 +217,7 @@ PATH_RULES = [
     ("reminky", R(r"reminky|pasky na hodinky|reminek")),
     ("sperkovnice", R(r"sperkovnic|krabicky na sperky|stojany na sperky")),
     ("boxy-na-hodinky", R(r"natahovac|boxy na hodinky")),
-    ("snubni-prsteny", R(r"snubni prsten")), ("zasnubni-prsteny", R(r"zasnubni prsten")), ("manzetove-knofliky", R(r"manzetove knofl")),
+    ("snubni-prsteny", R(r"snubni prsten")), ("zasnubni-prsteny", R(r"zasnubni prsten")), ("manzetove-knoflicky", R(r"manzetove knofl")),
     ("nausnice", R(r"nausnic")), ("prsteny", R(r"prsten")), ("nahrdelniky", R(r"nahrdelni")), ("naramky", R(r"naramk")),
     ("privesky", R(r"privesk")), ("retizky", R(r"retiz")), ("broze", R(r"broz")), ("piercing", R(r"piercing")),
     ("sperkove-soupravy", R(r"soupravy|sady sperku")), ("nakotniky", R(r"nakotnik")),

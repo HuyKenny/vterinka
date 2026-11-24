@@ -1054,6 +1054,449 @@
   "min": 10
  },
  {
+  "slug": "seiko-alpinist",
+  "h1": "Seiko Alpinist",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "alpinist",
+    "\\bspb1(21|55|97|99)",
+    "\\bsarb017"
+   ],
+   "brand": [
+    "Seiko"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/seiko/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "seiko-turtle",
+  "h1": "Seiko Turtle (Prospex)",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "\\bturtle\\b",
+    "\\bsrp(77[3-9]|78[0-9])",
+    "\\bsrpe9",
+    "\\bsrpg"
+   ],
+   "brand": [
+    "Seiko"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/seiko/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "seiko-astron",
+  "h1": "Seiko Astron",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "astron"
+   ],
+   "brand": [
+    "Seiko"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/seiko/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "seiko-presage-cocktail-time",
+  "h1": "Seiko Presage Cocktail Time",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "cocktail",
+    "\\bsrpb4[13]",
+    "\\bsrpe"
+   ],
+   "brand": [
+    "Seiko"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/seiko/",
+   "/seiko-presage-prospex/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "seiko-automaticke-hodinky",
+  "h1": "Seiko automatické hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "brand": [
+    "Seiko"
+   ],
+   "feats": [
+    "automaticke"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/seiko/",
+   "/automaticke-hodinky/"
+  ]
+ },
+ {
+  "slug": "citizen-tsuyosa",
+  "h1": "Citizen Tsuyosa",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "tsuyosa",
+    "\\bnj015"
+   ],
+   "brand": [
+    "Citizen"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/citizen/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "casio-duro",
+  "h1": "Casio Duro (MDV-106)",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "\\bduro\\b",
+    "\\bmdv.?10[67]",
+    "\\bmdv.?107"
+   ],
+   "brand": [
+    "Casio"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/casio/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "casio-aq-230",
+  "h1": "Casio AQ-230",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "\\baq.?230"
+   ],
+   "brand": [
+    "Casio"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/casio/",
+   "/casio-vintage-hodinky/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "casio-mtp-1302",
+  "h1": "Casio MTP-1302",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "\\bmtp.?1302"
+   ],
+   "brand": [
+    "Casio"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/casio/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "casio-illuminator",
+  "h1": "Casio Illuminator",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "illuminator"
+   ],
+   "brand": [
+    "Casio"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/casio/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "casio-world-time",
+  "h1": "Casio World Time",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "world ?time",
+    "\\bae.?1200",
+    "\\bae.?1000",
+    "\\baw.?80\\b"
+   ],
+   "brand": [
+    "Casio"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/casio/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "tissot-prx-powermatic-80",
+  "h1": "Tissot PRX Powermatic 80",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "\\bprx\\b.*powermatic",
+    "powermatic.*\\bprx\\b",
+    "\\bt137\\.?407",
+    "\\bt137\\.?207"
+   ],
+   "brand": [
+    "Tissot"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/tissot/",
+   "/tissot-prx/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "longines-hodinky",
+  "h1": "Hodinky Longines",
+  "group": "gap-hodinky",
+  "rules": {
+   "brand": [
+    "Longines"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/svycarske-hodinky/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "hamilton-hodinky",
+  "h1": "Hodinky Hamilton",
+  "group": "gap-hodinky",
+  "rules": {
+   "brand": [
+    "Hamilton"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/svycarske-hodinky/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "rado-hodinky",
+  "h1": "Hodinky Rado",
+  "group": "gap-hodinky",
+  "rules": {
+   "brand": [
+    "Rado"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/svycarske-hodinky/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "tag-heuer-hodinky",
+  "h1": "Hodinky TAG Heuer",
+  "group": "gap-hodinky",
+  "rules": {
+   "brand": [
+    "Tag Heuer",
+    "TAG Heuer"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/svycarske-hodinky/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "grand-seiko",
+  "h1": "Grand Seiko",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "grand seiko"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/seiko/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "diesel-hodinky",
+  "h1": "Hodinky Diesel",
+  "group": "gap-hodinky",
+  "rules": {
+   "brand": [
+    "Diesel"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "lead": "Pánské hodinky Diesel: velká pouzdra, chronografy a výrazný industriální design. Porovnejte cenu stejného modelu ve více obchodech."
+ },
+ {
+  "slug": "guess-hodinky-damske",
+  "h1": "Dámské hodinky Guess",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "damske-hodinky"
+   ],
+   "brand": [
+    "Guess"
+   ]
+  },
+  "parent": "/damske-hodinky/",
+  "hubs": [
+   "/znacky/guess/"
+  ]
+ },
+ {
+  "slug": "stribrne-hodinky",
+  "h1": "Stříbrné hodinky",
+  "group": "gap-hodinky",
+  "rules": {
+   "colors": [
+    "stribrna"
+   ],
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "lead": "Hodinky ve stříbrné barvě s ocelovým pouzdrem i tahem, pánské i dámské. Porovnání cen stejného modelu."
+ },
+ {
+  "slug": "hodinky-s-velkym-cifernikem",
+  "h1": "Hodinky s velkým ciferníkem",
+  "group": "gap-hodinky",
+  "rules": {
+   "any": [
+    "velk\\w* cifern",
+    "\\bxl\\b",
+    "oversize"
+   ],
+   "scope": "text",
+   "cat": [
+    "hodinky"
+   ]
+  },
+  "parent": null,
+  "min": 8
+ },
+ {
   "slug": "outdoorove-hodinky",
   "h1": "Outdoorové hodinky",
   "group": "gap-hodinky",
@@ -1290,7 +1733,7 @@
  },
  {
   "slug": "piercing-do-pupiku",
-  "h1": "Piercing do pupíku",
+  "h1": "Piercing do pupíku (belly piercing)",
   "group": "gap-hodinky",
   "rules": {
    "cat": [
@@ -1323,6 +1766,387 @@
    ]
   },
   "parent": "/piercing/"
+ },
+ {
+  "slug": "prsteny-se-safirem",
+  "h1": "Prsteny se safírem",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "prsteny",
+    "zasnubni-prsteny"
+   ],
+   "any": [
+    "\\bsafir(?!ov\\w* skl)\\w*",
+    "\\bsapphire"
+   ],
+   "scope": "text"
+  },
+  "parent": "/prsteny/"
+ },
+ {
+  "slug": "prsteny-s-rubinem",
+  "h1": "Prsteny s rubínem",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "prsteny",
+    "zasnubni-prsteny"
+   ],
+   "any": [
+    "\\brubin\\w*",
+    "\\bruby\\b"
+   ],
+   "scope": "text"
+  },
+  "parent": "/prsteny/"
+ },
+ {
+  "slug": "prsteny-se-smaragdem",
+  "h1": "Prsteny se smaragdem",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "prsteny",
+    "zasnubni-prsteny"
+   ],
+   "any": [
+    "\\bsmaragd\\w*",
+    "\\bemerald"
+   ],
+   "scope": "text"
+  },
+  "parent": "/prsteny/"
+ },
+ {
+  "slug": "prsteny-s-vltavinem",
+  "h1": "Prsteny s vltavínem",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "prsteny"
+   ],
+   "any": [
+    "\\bvltavin\\w*",
+    "\\bmoldavit"
+   ]
+  },
+  "parent": "/prsteny/"
+ },
+ {
+  "slug": "prsteny-s-ametystem",
+  "h1": "Prsteny s ametystem",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "prsteny"
+   ],
+   "any": [
+    "\\bametyst\\w*",
+    "\\bamethyst"
+   ]
+  },
+  "parent": "/prsteny/"
+ },
+ {
+  "slug": "prsteny-s-modrym-kamenem",
+  "h1": "Prsteny s modrým kamenem",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "prsteny",
+    "zasnubni-prsteny"
+   ],
+   "any": [
+    "\\bmodr\\w* (kamen|kamin|zirkon|krystal|topaz|safir)",
+    "\\bsafir\\w*",
+    "\\btopaz\\w*",
+    "\\btanzanit\\w*",
+    "\\bakvamarin\\w*"
+   ],
+   "scope": "text"
+  },
+  "parent": "/prsteny/"
+ },
+ {
+  "slug": "nausnice-s-vltavinem",
+  "h1": "Náušnice s vltavínem",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "nausnice"
+   ],
+   "any": [
+    "\\bvltavin\\w*",
+    "\\bmoldavit"
+   ]
+  },
+  "parent": "/nausnice/"
+ },
+ {
+  "slug": "nausnice-s-opalem",
+  "h1": "Náušnice s opálem",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "nausnice"
+   ],
+   "any": [
+    "\\bopal\\w*"
+   ]
+  },
+  "parent": "/nausnice/"
+ },
+ {
+  "slug": "nahrdelniky-z-pravych-perel",
+  "h1": "Náhrdelníky z pravých perel",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "nahrdelniky"
+   ],
+   "any": [
+    "\\bprav\\w* perl",
+    "\\bsladkovodn\\w* perl",
+    "\\bricn\\w* perl",
+    "\\bakoya",
+    "\\bperl\\w* (sladkovod|ricn)"
+   ],
+   "scope": "text"
+  },
+  "parent": "/nahrdelniky/s-perlou/"
+ },
+ {
+  "slug": "retizky-s-privesky",
+  "h1": "Řetízky s přívěskem",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "retizky",
+    "nahrdelniky"
+   ],
+   "any": [
+    "\\b(retiz\\w*|nahrdelnik\\w*) s privesk\\w*",
+    "\\bs privesk\\w*"
+   ]
+  },
+  "parent": "/retizky/"
+ },
+ {
+  "slug": "zlate-retizky-s-priveskem",
+  "h1": "Zlaté řetízky s přívěskem",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "retizky",
+    "nahrdelniky"
+   ],
+   "mats": [
+    "zlato"
+   ],
+   "any": [
+    "\\bs privesk\\w*"
+   ]
+  },
+  "parent": "/retizky/ze-zlata/"
+ },
+ {
+  "slug": "stribrne-retizky-s-priveskem",
+  "h1": "Stříbrné řetízky s přívěskem",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "retizky",
+    "nahrdelniky"
+   ],
+   "mats": [
+    "stribro"
+   ],
+   "any": [
+    "\\bs privesk\\w*"
+   ]
+  },
+  "parent": "/retizky/ze-stribra/"
+ },
+ {
+  "slug": "kozene-naramky",
+  "h1": "Kožené náramky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "naramky"
+   ],
+   "any": [
+    "\\bkozen\\w*",
+    "\\bleather"
+   ]
+  },
+  "parent": "/naramky/"
+ },
+ {
+  "slug": "panske-kozene-naramky",
+  "h1": "Pánské kožené náramky",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "naramky"
+   ],
+   "feats": [
+    "pro-muze"
+   ],
+   "any": [
+    "\\bkozen\\w*",
+    "\\bleather"
+   ]
+  },
+  "parent": "/naramky/panske/"
+ },
+ {
+  "slug": "naramky-pratelstvi",
+  "h1": "Náramky přátelství",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "naramky"
+   ],
+   "any": [
+    "pratelstv\\w*",
+    "\\bfriendship",
+    "\\bpro (nejlepsi )?kamarad\\w*",
+    "\\bbff\\b"
+   ],
+   "scope": "text"
+  },
+  "parent": "/naramky/"
+ },
+ {
+  "slug": "levne-snubni-prsteny",
+  "h1": "Levné snubní prsteny",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "snubni-prsteny"
+   ],
+   "price": [
+    null,
+    2500
+   ]
+  },
+  "parent": "/snubni-prsteny/",
+  "lead": "Snubní prsteny do 2 500 Kč za kus: ocel, wolfram, titan i stříbro. Cena je u většiny obchodů za jeden prsten, pár tedy vyjde na dvojnásobek.",
+  "dedupe_all": true
+ },
+ {
+  "slug": "netradicni-snubni-prsteny",
+  "h1": "Netradiční snubní prsteny",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "snubni-prsteny"
+   ],
+   "any": [
+    "\\bkarbon\\w*",
+    "\\bdrev\\w*",
+    "\\bwolfram\\w*",
+    "\\bmeteorit\\w*",
+    "\\bcern\\w*",
+    "\\bmodr\\w*",
+    "\\bkeramick\\w*",
+    "\\bnetradicn\\w*",
+    "\\boriginaln\\w*"
+   ],
+   "scope": "text"
+  },
+  "parent": "/snubni-prsteny/"
+ },
+ {
+  "slug": "snubni-prsteny-s-diamantem-pro-oba",
+  "h1": "Snubní prsteny pro oba (pár)",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "snubni-prsteny"
+   ],
+   "any": [
+    "\\bpar\\b",
+    "\\bparov\\w*",
+    "\\bpro oba",
+    "\\bsada"
+   ],
+   "scope": "text"
+  },
+  "parent": "/snubni-prsteny/"
+ },
+ {
+  "slug": "pandora-harry-potter",
+  "h1": "Pandora Harry Potter",
+  "group": "gap-hodinky",
+  "rules": {
+   "brand": [
+    "Pandora"
+   ],
+   "any": [
+    "harry potter",
+    "bradavic",
+    "hogwarts"
+   ],
+   "cat": [
+    "sperky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/pandora/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "pandora-disney",
+  "h1": "Pandora Disney",
+  "group": "gap-hodinky",
+  "rules": {
+   "brand": [
+    "Pandora"
+   ],
+   "any": [
+    "\\bdisney",
+    "\\bmickey",
+    "\\bminnie",
+    "\\bstitch",
+    "\\bfrozen",
+    "\\bmarvel",
+    "\\bstar wars"
+   ],
+   "cat": [
+    "sperky"
+   ]
+  },
+  "parent": null,
+  "hubs": [
+   "/znacky/pandora/"
+  ],
+  "min": 3,
+  "index_min": 6
+ },
+ {
+  "slug": "pandora-moments-naramky",
+  "h1": "Pandora Moments náramky na přívěsky",
+  "group": "gap-hodinky",
+  "rules": {
+   "brand": [
+    "Pandora"
+   ],
+   "cat": [
+    "naramky"
+   ],
+   "any": [
+    "\\bmoments\\b",
+    "\\bhad\\w*",
+    "\\bsnake"
+   ]
+  },
+  "parent": "/naramky/pandora/"
  },
  {
   "slug": "piercing-do-oboci",

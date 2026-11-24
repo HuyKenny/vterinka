@@ -230,8 +230,8 @@ def generated_records(products, by_cat):
                                  "_pred": (lambda f_, m: lambda p: f_ in p["feats"] and m in p["mats"])(f_, m)})
     for cat in ("prsteny", "nausnice", "nahrdelniky", "naramky", "privesky", "retizky"):
         items = by_cat.get(cat, [])
-        for m in ("stribro", "zlato", "chirurgicka-ocel"):
-            for f_ in ("s-perlou", "s-diamantem", "se-zirkony", "s-kamenem", "srdce", "kriz", "strom-zivota", "pro-muze", "pro-zeny", "pro-deti", "kruhove", "pecky"):
+        for m in ("stribro", "zlato", "bile-zlato", "chirurgicka-ocel"):      # bílé zlato: "dětské náušnice bílé zlato" 1 900, "náramek bílé zlato" 350 (Ahrefs 11/2026)
+            for f_ in ("s-perlou", "s-diamantem", "se-zirkony", "s-kamenem", "srdce", "kriz", "strom-zivota", "pro-muze", "pro-zeny", "pro-deti", "kruhove", "pecky", "visaci"):
                 n = sum(1 for p in items if f_ in p["feats"] and m in p["mats"])
                 if n >= INDEX_MIN_DEFAULT and not (f_ in X.EARRING_FEATS and cat != "nausnice"):
                     noun = X.CATS[cat][0]

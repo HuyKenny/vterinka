@@ -326,6 +326,61 @@
    "lw": 360,
    "lh": 92,
    "logo_src": 18204
+  },
+  {
+   "id": "moonjewellery",
+   "name": "Moon Jewellery",
+   "domain": "moonjewellery.cz",
+   "network": "dognet",
+   "chid": "fLj27Wk0",
+   "feed_key": "dg_moonjewellery",
+   "color": "#2E3A59",
+   "logo": "/img/shops/moonjewellery.webp",
+   "lw": 120,
+   "lh": 120,
+   "logo_src": 34140
+  },
+  {
+   "id": "timestore",
+   "name": "Timestore.cz",
+   "domain": "timestore.cz",
+   "network": "dognet",
+   "chid": "fLj27Wk0",
+   "feed_key": "dg_timestore",
+   "glami_params": true,
+   "include": "^(Hodinky|Šperky)",
+   "color": "#1F2A44",
+   "logo": "/img/shops/timestore.webp",
+   "lw": 360,
+   "lh": 96,
+   "logo_src": 23489
+  },
+  {
+   "id": "sofia",
+   "name": "Sofia",
+   "domain": "sofia.cz",
+   "network": "dognet",
+   "chid": "fLj27Wk0",
+   "feed_key": "dg_sofia",
+   "color": "#7A1F3D",
+   "budget": 1500,
+   "logo": "/img/shops/sofia.webp",
+   "lw": 269,
+   "lh": 120,
+   "logo_src": 23069
+  },
+  {
+   "id": "majya",
+   "name": "Majya",
+   "domain": "majya.cz",
+   "network": "dognet",
+   "chid": "fLj27Wk0",
+   "feed_key": "dg_majya",
+   "color": "#8C8C8C",
+   "logo": "/img/shops/majya.webp",
+   "lw": 193,
+   "lh": 120,
+   "logo_src": 22880
   }
  ]
 }

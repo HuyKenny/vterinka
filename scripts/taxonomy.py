@@ -180,7 +180,7 @@ def watch_cat(rec, t, p):
     if g:
         return WATCH_BY_GENDER[g], True
     prm = rec.get("prm") or {}
-    g = gender_of(fold(" ".join(prm.get(k, "") for k in ("určení", "pro koho"))))       # Hodinky.cz & co: "Určení: Pro muže" is the shop's own word
+    g = gender_of(fold(" ".join(prm.get(k, "") for k in ("určení", "pro koho", "pohlaví"))))       # Hodinky.cz & co: "Určení: Pro muže" is the shop's own word
     if g:
         return WATCH_BY_GENDER[g], True
     tm = t + " " + fold(rec.get("mpn") or "")
@@ -217,6 +217,7 @@ PATH_RULES = [
     ("reminky", R(r"reminky|pasky na hodinky|reminek")),
     ("sperkovnice", R(r"sperkovnic|krabicky na sperky|stojany na sperky")),
     ("boxy-na-hodinky", R(r"natahovac|boxy na hodinky")),
+    ("snubni-prsteny", R(r"snubni prsten")), ("zasnubni-prsteny", R(r"zasnubni prsten")), ("manzetove-knofliky", R(r"manzetove knofl")),
     ("nausnice", R(r"nausnic")), ("prsteny", R(r"prsten")), ("nahrdelniky", R(r"nahrdelni")), ("naramky", R(r"naramk")),
     ("privesky", R(r"privesk")), ("retizky", R(r"retiz")), ("broze", R(r"broz")), ("piercing", R(r"piercing")),
     ("sperkove-soupravy", R(r"soupravy|sady sperku")), ("nakotniky", R(r"nakotnik")),
@@ -264,7 +265,7 @@ COLORS = [  # slug, label, patterns (dial, case or piece colour)
     ("zlata", "zlatá", r"\bzlat[aeyouý]\w*|\bgold\b|\bpozlac\w*|\bzlatav"),
     ("ruzove-zlata", "růžově zlatá", r"\bruzov\w* zlat\w*|\brose ?gold|\brosegold|\brosé"),
     ("stribrna", "stříbrná", r"\bstribrn\w*|\bsilver\b|\bocelov\w* barv"),
-    ("cerna", "černá", r"\bcern[aeyáéý]\w*|\bblack\b"),
+    ("cerna", "černá", r"\bcern[aeyáéý]\w*|\bciern\w*|\bblack\b"),
     ("bila", "bílá", r"\bbil[aáeéyý]\w*|\bwhite\b|\bperletov\w*"),
     ("modra", "modrá", r"\bmodr\w*|\bnavy\b|\bblue\b|\btyrkys\w*"),
     ("zelena", "zelená", r"\bzelen\w*|\bgreen\b|\bolivov\w*|\bsmaragdov"),
@@ -571,12 +572,12 @@ FACETS = {
     "display": ("Ciferník", WATCH_CATS, [
         ("analogovy", "analogový", r"\banalog(?!\w* ?-? ?digit)\w*|\bručičk|\brucick"),
         ("digitalni", "digitální", r"(?<!analog )(?<!analogove )\bdigital\w*"),
-        ("kombinovany", "analogově-digitální", r"\banalog\w* ?-? ?digital\w*|\bana.?digi")]),
+        ("kombinovany", "analogově-digitální", r"\banalog\w* ?-? ?digital\w*|\bana.?digi|^kombinovan\w*")]),
 }
 # shop parameters that decide a facet (folded text of these values); the product title and description are the fallback where TEXT_OK allows it
-PRM_SRC = {"mov": ["typ strojku"], "func": ["funkce hodinek", "funkce hodinek add", "ukazatel data", "luminiscence", "alarm"], "casemat": ["materiál pouzdra"],
-           "strap": ["materiál řemínku"], "shape": ["tvar pouzdra"], "dialcol": ["barva ciferníku"], "strapcol": ["barva řemínku/tahu", "barva řemínku"],
-           "glass": ["sklo"], "wr": ["vodotěsnost"], "origin": ["původ"], "strapw": ["šířka řemínku"], "display": ["typ"]}
+PRM_SRC = {"mov": ["typ strojku", "pohon"], "func": ["funkce hodinek", "funkce hodinek add", "ukazatel data", "luminiscence", "alarm"], "casemat": ["materiál pouzdra", "pouzdro"],
+           "strap": ["materiál řemínku", "řemínek"], "shape": ["tvar pouzdra", "tvar hodinek"], "dialcol": ["barva ciferníku"], "strapcol": ["barva řemínku/tahu", "barva řemínku"],
+           "glass": ["sklo", "sklíčko"], "wr": ["vodotěsnost"], "origin": ["původ"], "strapw": ["šířka řemínku"], "display": ["typ", "typ ciferníku"]}
 # where the title/description may decide a facet when the shop gave no parameter (colour words in a title describe the whole watch, not the dial)
 TEXT_OK = {"mov": WATCH_CATS, "func": WATCH_CATS, "strap": WATCH_CATS, "glass": WATCH_CATS, "wr": WATCH_CATS, "display": WATCH_CATS, "strapw": {"reminky"}}
 FACETS_RX = {k: (lab, cats, [(v, vl, re.compile(rx)) for v, vl, rx in vals]) for k, (lab, cats, vals) in FACETS.items()}

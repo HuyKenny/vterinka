@@ -286,6 +286,10 @@ def xml_offers(shop, resp, link_of):
             sale, _ = price_of(d.get("sale_price"))
             price, was = (sale, regular) if 0 < sale < regular else (regular, 0)
             ean, brand, cat, desc = d.get("gtin", ""), d.get("brand", ""), d.get("product_type", "") or d.get("google_product_category", ""), d.get("description", "")
+        if shop.get("glami_params"):            # timestore: Glami export, CATEGORYTEXT is only "Glami.cz | Pánské šperky" (also for watches and sunglasses) -> build the path from the parameters
+            sex = pmap.get("pohlaví", "")
+            cat = (f"Hodinky > {sex}" if pmap.get("pohon") or pmap.get("typ ciferníku") else
+                   f"Šperky > {sex} > {pmap['kategorie šperků']}" if pmap.get("kategorie šperků") else "")
         if shop.get("cat_field"):               # aulix: product_type is wrong ("Zahrada > …" for every lamp)
             cat = d.get(shop["cat_field"]) or cat
         if cur and cur != "CZK":
@@ -311,7 +315,9 @@ def xml_offers(shop, resp, link_of):
 PRM_KEYS = {"materiál pouzdra", "materiál řemínku", "tvar pouzdra", "barva ciferníku", "barva řemínku/tahu", "barva řemínku", "typ strojku", "funkce hodinek",
             "funkce hodinek add", "ukazatel data", "původ", "šířka řemínku", "tloušťka", "hmotnost", "luminiscence", "alarm", "sklo", "vodotěsnost", "typ", "styl",
             "rezerva chodu", "velikost hodinek", "design & motiv", "osazení", "materiál", "zapínání", "barva", "povrchová úprava", "určení", "pro koho",
-            "povrchová úprava pouzdro", "luneta", "zkušenost"}
+            "povrchová úprava pouzdro", "luneta", "zkušenost",
+            # timestore (Glami): own parameter names
+            "pohon", "tvar hodinek", "typ ciferníku", "pouzdro", "řemínek", "sklíčko", "pohlaví", "materiál šperků", "kategorie šperků"}
 
 
 def open_url(url):

@@ -1,0 +1,19 @@
+{
+ "key": "landing:personalizovane-sperky",
+ "intro": "Šperky se jménem, iniciálou, datem nebo vlastním textem. Náramky, řetízky, přívěsky a prsteny s gravírováním z českých obchodů na jednom místě.",
+ "body": "<h2>Co jsou personalizované šperky</h2>\n<p>Personalizovaný šperk nese něco, co patří jen obdarovanému: jméno, iniciálu, datum, souřadnice místa nebo krátký vzkaz. Obchody ho buď vyrobí na zakázku, například řetízek se jménem vyřezaným z plechu, nebo do hotového šperku vyryjí text laserem či rytím. Je to častý dárek k narozeninám, výročí, narození dítěte nebo ke svatbě.</p>\n<h2>Nejčastější typy</h2>\n<ul>\n<li><strong>Řetízky a náhrdelníky se jménem:</strong> jméno tvoří přímo přívěsek. Vybírá se písmo, kov a délka řetízku. Tip na výběr najdete mezi <a href=\"/retizky-se-jmenem/\">řetízky se jménem</a>.</li>\n<li><strong>Přívěsky s iniciálou:</strong> jedno písmeno nebo monogram, jemnější a nenápadnější než celé jméno.</li>\n<li><strong>Náramky s gravírovanou destičkou:</strong> místo pro jméno, datum nebo krátký text, často i pro muže.</li>\n<li><strong>Prsteny a snubní prsteny:</strong> gravírování dovnitř obroučky je klasika. Více v průvodci <a href=\"/poradna/jak-vybrat-snubni-prsteny/\">jak vybrat snubní prsteny</a>.</li>\n</ul>\n<h2>Na co si dát pozor</h2>\n<p>Zkontrolujte, kolik znaků lze vyrýt a jestli obchod zvládne háčky a čárky. Některé laserové gravury je nepodporují nebo je nahradí písmenem bez diakritiky. Na malé ploše bývá lepší kratší text, dlouhá věta se v drobném písmu špatně čte. Text si před odesláním objednávky dvakrát přečtěte, personalizovaný šperk obvykle nejde vrátit, protože ho obchod vyrábí na míru.</p>\n<p>Počítejte i s delší dodací lhůtou. Výroba na zakázku trvá obvykle několik pracovních dní, před Vánoci a Valentýnem i déle. Materiál volte podle toho, jak často se bude šperk nosit: stříbro 925 a chirurgická ocel jsou vhodné na každý den, zlato vydrží celý život.</p>",
+ "faq": [
+  [
+   "Jde gravírovaný šperk vrátit?",
+   "Zpravidla ne. Šperk vyrobený nebo upravený podle vašeho přání je z odstoupení od smlouvy vyjmutý."
+  ],
+  [
+   "Umí obchody gravírovat s diakritikou?",
+   "Většina ano, ale ne všechny. Ověřte to v popisu produktu nebo se zeptejte prodejce."
+  ],
+  [
+   "Kolik znaků se vejde na přívěsek?",
+   "Záleží na velikosti a písmu. Obchody obvykle uvádějí limit, často jde o jednotky až nízké desítky znaků."
+  ]
+ ]
+}

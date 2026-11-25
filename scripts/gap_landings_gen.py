@@ -51,7 +51,7 @@ T = [
     ("g-shock-mr-g", "G-Shock Mr-G", dict(any=[r"\bmr.?g\b", r"\bmrg.?"]), dict(hubs=["/g-shock-hodinky/"], min=3, index_min=6)),
     ("g-shock-frogman-rangeman", "G-Shock Frogman a Rangeman", dict(any=[r"frogman", r"rangeman", r"\bgw.?9400", r"\bgwf.?"]), dict(hubs=["/g-shock-hodinky/"], min=3, index_min=6)),
     ("casio-collection-hodinky", "Casio Collection hodinky", dict(brand=["Casio"], any=[r"\bcollection\b", r"\bmtp.?\d", r"\bltp.?\d"]), dict(hubs=["/znacky/casio/"])),
-    ("casio-f-91w", "Casio F-91W a A168", dict(any=[r"\bf.?91w", r"\ba.?168", r"\ba.?158", r"\ba.?700"]), dict(hubs=["/casio-vintage-hodinky/"], min=4, index_min=8)),
+    ("casio-f-91w", "Casio F-91W a A168", dict(any=[r"\bf.?91w", r"\ba.?168", r"\ba.?158", r"\ba.?700"]), dict(hubs=["/casio-vintage-hodinky/"], min=1, index_min=3)),
     ("casio-pro-trek", "Casio Pro Trek", dict(any=[r"pro.?trek", r"\bprg.?\d", r"\bprw.?\d"]), dict(hubs=["/znacky/casio/"], min=4, index_min=8)),
     ("casio-baby-g", "Casio Baby-G", dict(any=[r"baby.?g\b", r"\bbga.?\d", r"\bbgd.?\d"]), dict(hubs=["/znacky/casio/"])),
     ("tissot-prx", "Tissot PRX", dict(any=[r"\bprx\b"], brand=["Tissot"]), dict(hubs=["/znacky/tissot/"], min=3, index_min=6)),
@@ -135,6 +135,11 @@ J = [
     ("pandora-harry-potter", "Pandora Harry Potter", dict(brand=["Pandora"], any=[r"harry potter", r"bradavic", r"hogwarts"], cat=["sperky"]), dict(hubs=["/znacky/pandora/"], min=3, index_min=6)),
     ("pandora-disney", "Pandora Disney", dict(brand=["Pandora"], any=[r"\bdisney", r"\bmickey", r"\bminnie", r"\bstitch", r"\bfrozen", r"\bmarvel", r"\bstar wars"], cat=["sperky"]), dict(hubs=["/znacky/pandora/"], min=3, index_min=6)),
     ("pandora-moments-naramky", "Pandora Moments náramky na přívěsky", dict(brand=["Pandora"], cat=["naramky"], any=[r"\bmoments\b", r"\bhad\w*", r"\bsnake"]), dict(parent="/naramky/pandora/")),
+    # ---- round 4 (Ahrefs 25. 11. 2026, Kenny: "i když je málo produktů"): small niches, the page lives from 1 product, indexed from 3
+    ("natahovace-hodinek", "Natahovače hodinek", dict(cat=["boxy-na-hodinky"], any=[r"\bnatahovac\w*", r"\bwinder\w*", r"\brotomat\w*", r"\brotator\w*"], scope="text"), dict(parent="/boxy-na-hodinky/", min=1, index_min=3)),
+    ("retizky-s-krizkem", "Řetízky s křížkem", dict(cat=["retizky", "nahrdelniky", "privesky"], any=[r"\bkrizek\b", r"\bkriz(ku|kem|ky|kem)\b", r"\bkriz\b", r"\bcross\b", r"\bkrucifix\w*"]), dict(parent="/retizky/", min=1, index_min=3)),
+    ("kabbalah-naramky", "Kabbalah náramky (červená šňůrka)", dict(cat=["naramky"], any=[r"\bkabal\w*", r"\bkabbal\w*", r"\bcerven\w* (snurk|provazk|nit)\w*", r"\bproti uhranuti", r"\bred string"], scope="text"), dict(parent="/naramky/", min=1, index_min=3)),
+    ("personalizovane-sperky", "Personalizované šperky s gravírováním", dict(cat=["sperky"], any=[r"\bgravir\w*", r"\bse jmenem", r"\bpersonaliz\w*", r"\bs inicial\w*", r"\bvlastni(m)? (text|napis|jmen)\w*", r"\bna prani\b"], scope="text"), dict(lead="Šperky se jménem, iniciálou nebo vlastním textem: náramky, řetízky, přívěsky a prsteny, které obchod vyrobí nebo vyryje podle vás.", min=1, index_min=3)),
     ("piercing-do-oboci", "Piercing do obočí", dict(cat=["piercing"], any=[r"\boboc\w*", r"\beyebrow"]), dict(parent="/piercing/")),
     ("piercing-do-rtu", "Piercing do rtu (labret)", dict(cat=["piercing"], any=[r"\bret\b", r"\brtu\b", r"\blabret", r"\blip\b"]), dict(parent="/piercing/")),
 ]

@@ -1,7 +1,7 @@
 """Watches & jewellery tree, classifier and attributes for vterinka.cz.
 
 Departments: Hodinky (by who wears them: pánské / dámské / dětské / unisex, kapesní), Šperky (by kind of piece) and
-Doplňky (straps, jewellery boxes, watch boxes and winders). Category URLs are flat (/panske-hodinky/, /nausnice/).
+Doplňky (straps, jewellery boxes, watch boxes and winders, table clocks). Category URLs are flat (/panske-hodinky/, /nausnice/).
 
 Everything is matched on a FOLDED text (lower case, no diacritics), so the patterns below are written without háčky.
 Smart watches and fitness bands are NOT part of the site (Kenny 19. 11. 2026: classic watches only): VETO_ABS throws
@@ -60,6 +60,7 @@ CATS = {
     "reminky": ("Řemínky na hodinky", "doplnky", "Řemínky a tahy na hodinky", "reminek"),
     "sperkovnice": ("Šperkovnice", "doplnky", "Šperkovnice a stojany na šperky", "sperkovnice"),
     "boxy-na-hodinky": ("Boxy na hodinky", "doplnky", "Boxy, pouzdra a natahovače hodinek", "box-na-hodinky"),
+    "stolni-hodiny": ("Stolní hodiny", "doplnky", "Stolní hodiny a hodiny na krb", "hodinky"),
 }
 
 TREE = {**{k: (v[0], None, v[1], v[2], v[3]) for k, v in ROOMS.items()},
@@ -71,7 +72,7 @@ JEWEL_CATS = {k for k, v in CATS.items() if v[1] == "sperky"}
 
 # cheaper than this = a strap, a battery or a toy in the wrong place
 PRICE_FLOOR = {"panske-hodinky": 250, "damske-hodinky": 200, "unisex-hodinky": 200, "detske-hodinky": 120, "kapesni-hodinky": 150,
-               "snubni-prsteny": 300, "zasnubni-prsteny": 400, "boxy-na-hodinky": 150, "reminky": 59}
+               "snubni-prsteny": 300, "zasnubni-prsteny": 400, "boxy-na-hodinky": 150, "reminky": 59, "stolni-hodiny": 200}
 
 # ------------------------------------------------------------------ veto
 # anywhere in the title: not a classic watch / not jewellery, whatever comes first
@@ -98,6 +99,7 @@ R = lambda s: re.compile(s, I)
 
 # watches: the category is decided by who wears them (watch_cat); these rules only say "it is a watch"
 WATCH_RX = R(r"\bhodink\w*|\bhodinek\b|\bwatch(es)?\b|\bchronograf\w*|\bnaramkov\w* hodin")
+TABLE_CLOCK = R(r"(\w+ ){0,2}(stoln\w*|krbov\w*) hodin\w*")
 POCKET_RX = R(r"\bkapesn\w* hodin|\bpocket watch|\bhodink\w* na retiz|\bcibul\w* hodin")
 
 # (category, pattern on the folded title). The rule whose match starts EARLIEST wins (Czech titles name the thing first);
@@ -193,6 +195,8 @@ def title_class(rec):
     """What the TITLE says: (category, strong) or (VETOED, True) or (None, False)."""
     t = fold(clean(rec.get("t"))).replace("-", " ")
     p = fold(rec.get("cat") or "")
+    if TABLE_CLOCK.match(t) and not re.search(r"\b(digitaln\w*|led|projekc\w*|meteostanic\w*|teplomer\w*|detsk\w*|hrack\w*)\b", t):
+        return "stolni-hodiny", True           # the only clocks we carry (Ahrefs 25. 11.: "stolní hodiny" 700/month); alarm, wall and LED clocks stay out
     if VETO_PATH.search(p) or VETO_ABS.search(t):
         return VETOED, True
     best = None
@@ -217,6 +221,7 @@ PATH_RULES = [
     ("reminky", R(r"reminky|pasky na hodinky|reminek")),
     ("sperkovnice", R(r"sperkovnic|krabicky na sperky|stojany na sperky")),
     ("boxy-na-hodinky", R(r"natahovac|boxy na hodinky")),
+    ("stolni-hodiny", R(r"stolni hodiny|krbove hodiny")),
     ("snubni-prsteny", R(r"snubni prsten")), ("zasnubni-prsteny", R(r"zasnubni prsten")), ("manzetove-knoflicky", R(r"manzetove knofl")),
     ("nausnice", R(r"nausnic")), ("prsteny", R(r"prsten")), ("nahrdelniky", R(r"nahrdelni")), ("naramky", R(r"naramk")),
     ("privesky", R(r"privesk")), ("retizky", R(r"retiz")), ("broze", R(r"broz")), ("piercing", R(r"piercing")),

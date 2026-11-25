@@ -637,8 +637,8 @@
   "hubs": [
    "/casio-vintage-hodinky/"
   ],
-  "min": 4,
-  "index_min": 8
+  "min": 1,
+  "index_min": 3
  },
  {
   "slug": "casio-pro-trek",
@@ -2147,6 +2147,92 @@
    ]
   },
   "parent": "/naramky/pandora/"
+ },
+ {
+  "slug": "natahovace-hodinek",
+  "h1": "Natahovače hodinek",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "boxy-na-hodinky"
+   ],
+   "any": [
+    "\\bnatahovac\\w*",
+    "\\bwinder\\w*",
+    "\\brotomat\\w*",
+    "\\brotator\\w*"
+   ],
+   "scope": "text"
+  },
+  "parent": "/boxy-na-hodinky/",
+  "min": 1,
+  "index_min": 3
+ },
+ {
+  "slug": "retizky-s-krizkem",
+  "h1": "Řetízky s křížkem",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "retizky",
+    "nahrdelniky",
+    "privesky"
+   ],
+   "any": [
+    "\\bkrizek\\b",
+    "\\bkriz(ku|kem|ky|kem)\\b",
+    "\\bkriz\\b",
+    "\\bcross\\b",
+    "\\bkrucifix\\w*"
+   ]
+  },
+  "parent": "/retizky/",
+  "min": 1,
+  "index_min": 3
+ },
+ {
+  "slug": "kabbalah-naramky",
+  "h1": "Kabbalah náramky (červená šňůrka)",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "naramky"
+   ],
+   "any": [
+    "\\bkabal\\w*",
+    "\\bkabbal\\w*",
+    "\\bcerven\\w* (snurk|provazk|nit)\\w*",
+    "\\bproti uhranuti",
+    "\\bred string"
+   ],
+   "scope": "text"
+  },
+  "parent": "/naramky/",
+  "min": 1,
+  "index_min": 3
+ },
+ {
+  "slug": "personalizovane-sperky",
+  "h1": "Personalizované šperky s gravírováním",
+  "group": "gap-hodinky",
+  "rules": {
+   "cat": [
+    "sperky"
+   ],
+   "any": [
+    "\\bgravir\\w*",
+    "\\bse jmenem",
+    "\\bpersonaliz\\w*",
+    "\\bs inicial\\w*",
+    "\\bvlastni(m)? (text|napis|jmen)\\w*",
+    "\\bna prani\\b"
+   ],
+   "scope": "text"
+  },
+  "parent": null,
+  "min": 1,
+  "index_min": 3,
+  "lead": "Šperky se jménem, iniciálou nebo vlastním textem: náramky, řetízky, přívěsky a prsteny, které obchod vyrobí nebo vyryje podle vás."
  },
  {
   "slug": "piercing-do-oboci",
